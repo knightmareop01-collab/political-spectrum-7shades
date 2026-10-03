@@ -6,9 +6,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 
-# ----------------- ตั้งค่าฟอนต์ภาษาไทยให้รองรับ Linux บน Streamlit Cloud 100% -----------------
+# ----------------- ตั้งค่าฟอนต์สำหรับ Matplotlib -----------------
 def setup_thai_font():
-    # ติดตั้ง/กำหนดฟอนต์ที่รองรับ Unicode ภาษาไทยบนคลาวด์และเครื่องทั่วไป
     plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Liberation Sans', 'Tahoma', 'Leelawadee UI', 'Segoe UI']
     plt.rcParams['axes.unicode_minus'] = False
 
@@ -18,10 +17,10 @@ setup_thai_font()
 st.set_page_config(
     page_title="แบบประเมินจุดยืนทางการเมือง 7 อุดมการณ์",
     page_icon="🧭",
-    layout="centered"
+    layout="wide"  # ใช้ Wide layout เพื่อจัดสัดส่วนบนจอคอมพิวเตอร์ได้สมดุล
 )
 
-# ----------------- CSS ปรับแต่งสำหรับมือถือ (Mobile Friendly & Clean Red) -----------------
+# ----------------- CSS สไตล์ Responsive UI (รองรับทั้งคอมและมือถือ) -----------------
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
@@ -35,113 +34,97 @@ st.markdown("""
         color: #1e293b !important;
     }
     
-    /* Hero Banner บนมือถือกระชับ สวยงาม */
+    /* ควบคุมความกว้างเนื้อหาหลักให้สมดุลบนจอคอม */
+    .block-container {
+        max-width: 1080px !important;
+        padding-top: 2rem !important;
+        padding-bottom: 3rem !important;
+    }
+    
+    /* Hero Banner สว่างพรีเมียม */
     .hero-banner-red {
         background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 50%, #fecdd3 100%);
-        border-radius: 18px;
-        padding: 24px 16px;
+        border-radius: 20px;
+        padding: 30px 24px;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
         border: 1px solid #fecdd3;
-        box-shadow: 0 4px 16px rgba(225, 29, 72, 0.05);
+        box-shadow: 0 4px 20px rgba(225, 29, 72, 0.05);
     }
     
     .tag-badge-red {
         background-color: #ffe4e6;
         color: #e11d48;
-        font-size: 12.5px;
+        font-size: 13px;
         font-weight: 700;
-        padding: 4px 12px;
-        border-radius: 16px;
+        padding: 5px 14px;
+        border-radius: 20px;
         display: inline-block;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         border: 1px solid #fecdd3;
     }
     
-    /* การ์ดสีขาว */
+    /* การ์ดสีขาวสว่าง */
     .main-card-light {
         background-color: #ffffff;
         border-radius: 16px;
-        padding: 20px 16px;
+        padding: 24px;
         border: 1px solid #f1f5f9;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
-        margin-bottom: 18px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+        margin-bottom: 20px;
     }
     
-    /* ตัวเลือกข้อสอบทั่วไป (ข้อ 1-14) */
     div[data-testid="stRadio"] label p {
         font-size: 15px !important;
         font-weight: 500 !important;
         color: #1e293b !important;
-        line-height: 1.4 !important;
+        line-height: 1.5 !important;
     }
-    
     div[data-testid="stRadio"] > div {
         background-color: #ffffff;
-        padding: 10px 12px;
+        padding: 10px 14px;
         border-radius: 12px;
         border: 1px solid #f1f5f9;
     }
 
-    /* กล่องการ์ดตัวเลือกข้อ 15 แต่ละข้อแยกกันชัดเจน */
-    .q15-card {
-        background: #ffffff;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 14px 16px;
-        margin-bottom: 12px;
-        transition: all 0.2s ease;
-        line-height: 1.6;
-        font-size: 14px;
-        color: #1e293b;
-    }
-    .q15-card:hover {
-        border-color: #e11d48;
-        background-color: #fff1f2;
-    }
-
-    /* ปุ่มกดหลัก */
+    /* ปุ่มกดหลักโทนแดง */
     div.stButton > button[kind="primary"] {
         background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
         color: #ffffff !important;
         border: none !important;
         border-radius: 12px !important;
         font-weight: 600 !important;
-        padding: 10px 20px !important;
+        padding: 10px 24px !important;
         box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25) !important;
-        width: 100% !important;
     }
-    
     div.stButton > button[kind="secondary"] {
         background-color: #ffffff !important;
         color: #475569 !important;
         border: 1px solid #e2e8f0 !important;
         border-radius: 12px !important;
         font-weight: 500 !important;
-        padding: 9px 16px !important;
-        width: 100% !important;
+        padding: 9px 20px !important;
     }
 
-    /* การ์ดบุคคลสำคัญบนมือถือ */
+    /* การ์ดบุคคลสำคัญ 3 ใบ สัดส่วนมาตรฐาน ไม่ยืดแบน */
     .person-card-complete {
         background: #ffffff;
         border: 1px solid #f1f5f9;
         border-radius: 16px;
-        padding: 16px;
+        padding: 18px;
         text-align: center;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-        margin-bottom: 18px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        min-height: 480px;
+        margin-bottom: 15px;
     }
     
-    /* กรอบรูปภาพบังคับขนาดเท่ากัน 100% */
+    /* ปรับกรอบรูปภาพตามอัตราส่วน ล็อกตำแหน่งใบหน้าตรงกลางพอดี */
     .person-img-wrapper {
         width: 100%;
-        height: 220px !important;
-        min-height: 220px !important;
-        max-height: 220px !important;
+        aspect-ratio: 4 / 3;
         border-radius: 12px;
         overflow: hidden;
         margin: 12px 0;
@@ -155,8 +138,7 @@ st.markdown("""
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
-        object-position: top center !important;
-        display: block;
+        object-position: center 20% !important; /* จัดให้เห็นศีรษะและใบหน้าชัดเจนพอดี */
     }
     
     .quote-box-red {
@@ -169,6 +151,9 @@ st.markdown("""
         margin-top: 8px;
         text-align: left;
         line-height: 1.45;
+        min-height: 52px;
+        display: flex;
+        align-items: center;
     }
     .stat-badge-red {
         background: #ffe4e6;
@@ -254,157 +239,31 @@ def get_image_base64(name_key):
 
 # ----------------- คำถาม 15 ข้อ -----------------
 questions_15 = [
-    {
-        "id": 1,
-        "code": "Q1",
-        "shade": "คอมมิวนิสต์",
-        "q": "รัฐควรให้ความสำคัญกับผลประโยชน์และความต้องการของส่วนรวมมากกว่าสิทธิในการถือครองทรัพย์สินและผลประโยชน์ส่วนบุคคล เพื่อสร้างสังคมที่ไม่มีการแก่งแย่งชนชั้น",
-        "type": "scale"
-    },
-    {
-        "id": 2,
-        "code": "Q2",
-        "shade": "คอมมิวนิสต์",
-        "q": "ประชาชนควรร่วมกันทำงานและมีส่วนร่วมในการผลิตและแบ่งปันทรัพยากรหรือผลผลิตของประเทศอย่างเป็นธรรม",
-        "type": "scale"
-    },
-    {
-        "id": 3,
-        "code": "Q3",
-        "shade": "สังคมนิยม",
-        "q": "การศึกษาและการรักษาพยาบาลทุกระดับ ควรเป็นสิทธิขั้นพื้นฐานที่ทุกคนต้องได้รับฟรี โดยรัฐเป็นผู้รับผิดชอบค่าใช้จ่ายทั้งหมด",
-        "type": "scale"
-    },
-    {
-        "id": 4,
-        "code": "Q4",
-        "shade": "สังคมนิยม",
-        "q": "รัฐบาลควรเข้ามาแทรกแซงและควบคุมระบบเศรษฐกิจ (เช่น ควบคุมราคาสินค้า หรือกำหนดค่าแรงขั้นต่ำให้สูง) เพื่อป้องกันไม่ให้เกิดความเหลื่อมล้ำทางรายได้",
-        "type": "scale"
-    },
-    {
-        "id": 5,
-        "code": "Q5",
-        "shade": "เสรีนิยม",
-        "q": "ประชาชนควรมีสิทธิแสดงความคิดเห็นทางการเมืองได้อย่างเสรี แม้ความคิดเห็นนั้นจะวิพากษ์วิจารณ์รัฐบาล",
-        "type": "scale"
-    },
-    {
-        "id": 6,
-        "code": "Q6",
-        "shade": "เสรีนิยม",
-        "q": "รัฐไม่ควรจำกัดเสรีภาพของประชาชน เว้นแต่การกระทำนั้นจะก่อให้เกิดอันตรายต่อผู้อื่น",
-        "type": "scale"
-    },
-    {
-        "id": 7,
-        "code": "Q7",
-        "shade": "สายกลาง",
-        "q": "การแก้ปัญหาประเทศที่ดีที่สุด คือการประนีประนอมและค่อยเป็นค่อยไป มากกว่าการยึดติดกับอุดมการณ์สุดโต่งข้างใดข้างหนึ่ง",
-        "type": "scale"
-    },
-    {
-        "id": 8,
-        "code": "Q8",
-        "shade": "สายกลาง",
-        "q": "นโยบายรัฐไม่ควรตัดสินจากคำว่า 'ฝ่ายซ้าย' หรือ 'ฝ่ายขวา' แต่ควรวัดจากหลักฐานเชิงประจักษ์และความเป็นไปได้จริงในทางปฏิบัติ",
-        "type": "scale"
-    },
-    {
-        "id": 9,
-        "code": "Q9",
-        "shade": "อนุรักษ์นิยม",
-        "q": "สังคมควรรักษาประเพณีและวัฒนธรรมดั้งเดิมไว้ มากกว่าการเปลี่ยนแปลงตามกระแสสมัยใหม่",
-        "type": "scale"
-    },
-    {
-        "id": 10,
-        "code": "Q10",
-        "shade": "อนุรักษ์นิยม",
-        "q": "การเปลี่ยนแปลงโครงสร้างทางสังคมและการเมืองควรทำอย่างค่อยเป็นค่อยไป ไม่ควรเปลี่ยนแปลงอย่างรวดเร็วหรือรุนแรง",
-        "type": "scale"
-    },
-    {
-        "id": 11,
-        "code": "Q11",
-        "shade": "อิสระนิยม",
-        "q": "รัฐบาลควรแทรกแซงเศรษฐกิจและการทำธุรกิจให้น้อยที่สุด ปล่อยให้เป็นเรื่องของกลไกตลาดเสรีและการแข่งขันอย่างเป็นธรรม",
-        "type": "scale"
-    },
-    {
-        "id": 12,
-        "code": "Q12",
-        "shade": "อิสระนิยม",
-        "q": "ตราบใดที่การกระทำนั้นไม่ได้ละเมิดหรือสร้างความเดือดร้อนให้คนอื่น ประชาชนควรมีเสรีภาพในการตัดสินใจชีวิตตนเองอย่างเต็มที่ เช่น ความเชื่อ ร่างกาย",
-        "type": "scale"
-    },
-    {
-        "id": 13,
-        "code": "Q13",
-        "shade": "ฟาสซิสต์",
-        "q": "เชื้อชาติที่มีอารยธรรมและศักยภาพเหนือกกว่า ย่อมมีสิทธิ์โดยชอบธรรมในการนำพาหรือควบคุมประชากรอื่นเพื่อความก้าวหน้า",
-        "type": "scale"
-    },
-    {
-        "id": 14,
-        "code": "Q14",
-        "shade": "ฟาสซิสต์",
-        "q": "ความมั่นคงของรัฐมีความสำคัญมากกว่าสิทธิและเสรีภาพของปัจเจกชน",
-        "type": "scale"
-    },
-    {
-        "id": 15,
-        "code": "Q15",
-        "shade": "ตัวตัดสิน",
-        "q": "หากคุณมีโอกาสกำหนดรูปแบบการบริหารประเทศในรัฐบาลในฝันของคุณ คุณจะเลือกแนวทางใดต่อไปนี้มากที่สุด?",
-        "type": "bonus"
-    }
+    {"id": 1, "code": "Q1", "shade": "คอมมิวนิสต์", "q": "รัฐควรให้ความสำคัญกับผลประโยชน์และความต้องการของส่วนรวมมากกว่าสิทธิในการถือครองทรัพย์สินและผลประโยชน์ส่วนบุคคล เพื่อสร้างสังคมที่ไม่มีการแก่งแย่งชนชั้น", "type": "scale"},
+    {"id": 2, "code": "Q2", "shade": "คอมมิวนิสต์", "q": "ประชาชนควรร่วมกันทำงานและมีส่วนร่วมในการผลิตและแบ่งปันทรัพยากรหรือผลผลิตของประเทศอย่างเป็นธรรม", "type": "scale"},
+    {"id": 3, "code": "Q3", "shade": "สังคมนิยม", "q": "การศึกษาและการรักษาพยาบาลทุกระดับ ควรเป็นสิทธิขั้นพื้นฐานที่ทุกคนต้องได้รับฟรี โดยรัฐเป็นผู้รับผิดชอบค่าใช้จ่ายทั้งหมด", "type": "scale"},
+    {"id": 4, "code": "Q4", "shade": "สังคมนิยม", "q": "รัฐบาลควรเข้ามาแทรกแซงและควบคุมระบบเศรษฐกิจ (เช่น ควบคุมราคาสินค้า หรือกำหนดค่าแรงขั้นต่ำให้สูง) เพื่อป้องกันไม่ให้เกิดความเหลื่อมล้ำทางรายได้", "type": "scale"},
+    {"id": 5, "code": "Q5", "shade": "เสรีนิยม", "q": "ประชาชนควรมีสิทธิแสดงความคิดเห็นทางการเมืองได้อย่างเสรี แม้ความคิดเห็นนั้นจะวิพากษ์วิจารณ์รัฐบาล", "type": "scale"},
+    {"id": 6, "code": "Q6", "shade": "เสรีนิยม", "q": "รัฐไม่ควรจำกัดเสรีภาพของประชาชน เว้นแต่การกระทำนั้นจะก่อให้เกิดอันตรายต่อผู้อื่น", "type": "scale"},
+    {"id": 7, "code": "Q7", "shade": "สายกลาง", "q": "การแก้ปัญหาประเทศที่ดีที่สุด คือการประนีประนอมและค่อยเป็นค่อยไป มากกว่าการยึดติดกับอุดมการณ์สุดโต่งข้างใดข้างหนึ่ง", "type": "scale"},
+    {"id": 8, "code": "Q8", "shade": "สายกลาง", "q": "นโยบายรัฐไม่ควรตัดสินจากคำว่า 'ฝ่ายซ้าย' หรือ 'ฝ่ายขวา' แต่ควรวัดจากหลักฐานเชิงประจักษ์และความเป็นไปได้จริงในทางปฏิบัติ", "type": "scale"},
+    {"id": 9, "code": "Q9", "shade": "อนุรักษ์นิยม", "q": "สังคมควรรักษาประเพณีและวัฒนธรรมดั้งเดิมไว้ มากกว่าการเปลี่ยนแปลงตามกระแสสมัยใหม่", "type": "scale"},
+    {"id": 10, "code": "Q10", "shade": "อนุรักษ์นิยม", "q": "การเปลี่ยนแปลงโครงสร้างทางสังคมและการเมืองควรทำอย่างค่อยเป็นค่อยไป ไม่ควรเปลี่ยนแปลงอย่างรวดเร็วหรือรุนแรง", "type": "scale"},
+    {"id": 11, "code": "Q11", "shade": "อิสระนิยม", "q": "รัฐบาลควรแทรกแซงเศรษฐกิจและการทำธุรกิจให้น้อยที่สุด ปล่อยให้เป็นเรื่องของกลไกตลาดเสรีและการแข่งขันอย่างเป็นธรรม", "type": "scale"},
+    {"id": 12, "code": "Q12", "shade": "อิสระนิยม", "q": "ตราบใดที่การกระทำนั้นไม่ได้ละเมิดหรือสร้างความเดือดร้อนให้คนอื่น ประชาชนควรมีเสรีภาพในการตัดสินใจชีวิตตนเองอย่างเต็มที่ เช่น ความเชื่อ ร่างกาย", "type": "scale"},
+    {"id": 13, "code": "Q13", "shade": "ฟาสซิสต์", "q": "เชื้อชาติที่มีอารยธรรมและศักยภาพเหนือกกว่า ย่อมมีสิทธิ์โดยชอบธรรมในการนำพาหรือควบคุมประชากรอื่นเพื่อความก้าวหน้า", "type": "scale"},
+    {"id": 14, "code": "Q14", "shade": "ฟาสซิสต์", "q": "ความมั่นคงของรัฐมีความสำคัญมากกว่าสิทธิและเสรีภาพของปัจเจกชน", "type": "scale"},
+    {"id": 15, "code": "Q15", "shade": "ตัวตัดสิน", "q": "หากคุณมีโอกาสกำหนดรูปแบบการบริหารประเทศในรัฐบาลในฝันของคุณ คุณจะเลือกแนวทางใดต่อไปนี้มากที่สุด?", "type": "bonus"}
 ]
 
-# ตัวเลือกข้อ 15
 q15_options = [
-    {
-        "id": 0,
-        "shade": "คอมมิวนิสต์",
-        "title": "รูปแบบที่ 1 : เน้นความเสมอภาคและรัฐดูแลส่วนรวมเป็นหลัก",
-        "text": "รัฐเข้ามาดูแลทรัพยากรและกิจการสำคัญของประเทศเป็นหลัก ลดความเหลื่อมล้ำด้านรายได้และทรัพย์สิน ให้ประชาชนมีความเสมอภาคสูง และการตัดสินใจทางเศรษฐกิจและการเมืองเป็นไปในทิศทางเดียวกันเพื่อประโยชน์ส่วนรวม"
-    },
-    {
-        "id": 1,
-        "shade": "สังคมนิยม",
-        "title": "รูปแบบที่ 2 : เน้นรัฐสวัสดิการถ้วนหน้าและลดช่องว่างทางชนชั้น",
-        "text": "รัฐจัดสวัสดิการและบริการสาธารณะอย่างทั่วถึง ควบคุมหรือกำกับกิจการสำคัญบางส่วนเพื่อสร้างความเป็นธรรมทางเศรษฐกิจ เปิดให้ประชาชนมีส่วนร่วมทางการเมือง และพยายามลดความแตกต่างระหว่างกลุ่มคนในสังคม"
-    },
-    {
-        "id": 2,
-        "shade": "เสรีนิยม",
-        "title": "รูปแบบที่ 3 : เน้นสิทธิเสรีภาพ ความเท่าเทียม และกลไกตลาดมีธรรมภิบาล",
-        "text": "รัฐคุ้มครองสิทธิและเสรีภาพของประชาชน เปิดโอกาสให้ทุกคนแข่งขันและแสดงความคิดเห็นได้อย่างเท่าเทียม ใช้ระบบเศรษฐกิจที่อาศัยตลาดเป็นสำคัญแต่มีมาตรการช่วยเหลือผู้ที่เสียเปรียบ และยึดหลักการปกครองที่ประชาชนมีส่วนร่วม"
-    },
-    {
-        "id": 3,
-        "shade": "สายกลาง",
-        "title": "รูปแบบที่ 4 : เน้นการประนีประนอม นโยบายผสมผสานตามสถานการณ์จริง",
-        "text": "รัฐเลือกใช้นโยบายตามสถานการณ์ โดยผสมผสานการดูแลเศรษฐกิจของรัฐกับกลไกตลาด ให้ความสำคัญทั้งสิทธิเสรีภาพและความมั่นคง ส่งเสริมสวัสดิการในระดับที่เหมาะสม และเปิดพื้นที่ให้ความคิดเห็นที่แตกต่างสามารถอยู่ร่วมกันได้"
-    },
-    {
-        "id": 4,
-        "shade": "อนุรักษ์นิยม",
-        "title": "รูปแบบที่ 5 : เน้นความมั่นคง ระเบียบวินัย และจารีตประเพณีอันดีงาม",
-        "text": "รัฐให้ความสำคัญกับความมั่นคงของประเทศ ระเบียบวินัย และการรักษาขนบธรรมเนียมที่สังคมเห็นว่ามีคุณค่า สนับสนุนเศรษฐกิจที่เติบโตโดยอาศัยภาคเอกชนและครอบครัวเป็นกำลังสำคัญ พร้อมเปลี่ยนแปลงสิ่งต่างๆ อย่างค่อยเป็นค่อยไป"
-    },
-    {
-        "id": 5,
-        "shade": "อิสระนิยม",
-        "title": "รูปแบบที่ 6 : เน้นตลาดเสรีบริสุทธิ์และจำกัดบทบาทรัฐให้น้อยที่สุด",
-        "text": "รัฐควรเข้าไปยุ่งเกี่ยวกับชีวิตและเศรษฐกิจของประชาชนให้น้อยที่สุด เปิดโอกาสให้แต่ละคนตัดสินใจและประกอบกิจการได้อย่างอิสระ ลดกฎระเบียบและภาษีที่ไม่จำเป็น และจำกัดอำนาจรัฐเพื่อคุ้มครองสิทธิและเสรีภาพของแต่ละบุคคล"
-    },
-    {
-        "id": 6,
-        "shade": "ฟาสซิสต์",
-        "title": "รูปแบบที่ 7 : เน้นเอกภาพแห่งชาติ รวมศูนย์อำนาจ และระเบียบวินัยเข้มงวด",
-        "text": "รัฐรวมอำนาจในการกำหนดทิศทางประเทศไว้อย่างเข้มแข็ง ให้ความสำคัญกับความเป็นเอกภาพของชาติ วินัย และการเชื่อฟังอำนาจรัฐ ส่งเสริมเศรษฐกิจที่ตอบสนองเป้าหมายของชาติ และจำกัดความขัดแย้งทางการเมืองเพื่อรักษาความเป็นระเบียบและความมั่นคงของประเทศ"
-    }
+    {"id": 0, "shade": "คอมมิวนิสต์", "title": "รูปแบบที่ 1 : เน้นความเสมอภาคและรัฐดูแลส่วนรวมเป็นหลัก", "text": "รัฐเข้ามาดูแลทรัพยากรและกิจการสำคัญของประเทศเป็นหลัก ลดความเหลื่อมล้ำด้านรายได้และทรัพย์สิน ให้ประชาชนมีความเสมอภาคสูง และการตัดสินใจทางเศรษฐกิจและการเมืองเป็นไปในทิศทางเดียวกันเพื่อประโยชน์ส่วนรวม"},
+    {"id": 1, "shade": "สังคมนิยม", "title": "รูปแบบที่ 2 : เน้นรัฐสวัสดิการถ้วนหน้าและลดช่องว่างทางชนชั้น", "text": "รัฐจัดสวัสดิการและบริการสาธารณะอย่างทั่วถึง ควบคุมหรือกำกับกิจการสำคัญบางส่วนเพื่อสร้างความเป็นธรรมทางเศรษฐกิจ เปิดให้ประชาชนมีส่วนร่วมทางการเมือง และพยายามลดความแตกต่างระหว่างกลุ่มคนในสังคม"},
+    {"id": 2, "shade": "เสรีนิยม", "title": "รูปแบบที่ 3 : เน้นสิทธิเสรีภาพ ความเท่าเทียม และกลไกตลาดมีธรรมภิบาล", "text": "รัฐคุ้มครองสิทธิและเสรีภาพของประชาชน เปิดโอกาสให้ทุกคนแข่งขันและแสดงความคิดเห็นได้อย่างเท่าเทียม ใช้ระบบเศรษฐกิจที่อาศัยตลาดเป็นสำคัญแต่มีมาตรการช่วยเหลือผู้ที่เสียเปรียบ และยึดหลักการปกครองที่ประชาชนมีส่วนร่วม"},
+    {"id": 3, "shade": "สายกลาง", "title": "รูปแบบที่ 4 : เน้นการประนีประนอม นโยบายผสมผสานตามสถานการณ์จริง", "text": "รัฐเลือกใช้นโยบายตามสถานการณ์ โดยผสมผสานการดูแลเศรษฐกิจของรัฐกับกลไกตลาด ให้ความสำคัญทั้งสิทธิเสรีภาพและความมั่นคง ส่งเสริมสวัสดิการในระดับที่เหมาะสม และเปิดพื้นที่ให้ความคิดเห็นที่แตกต่างสามารถอยู่ร่วมกันได้"},
+    {"id": 4, "shade": "อนุรักษ์นิยม", "title": "รูปแบบที่ 5 : เน้นความมั่นคง ระเบียบวินัย และจารีตประเพณีอันดีงาม", "text": "รัฐให้ความสำคัญกับความมั่นคงของประเทศ ระเบียบวินัย และการรักษาขนบธรรมเนียมที่สังคมเห็นว่ามีคุณค่า สนับสนุนเศรษฐกิจที่เติบโตโดยอาศัยภาคเอกชนและครอบครัวเป็นกำลังสำคัญ พร้อมเปลี่ยนแปลงสิ่งต่างๆ อย่างค่อยเป็นค่อยไป"},
+    {"id": 5, "shade": "อิสระนิยม", "title": "รูปแบบที่ 6 : เน้นตลาดเสรีบริสุทธิ์และจำกัดบทบาทรัฐให้น้อยที่สุด", "text": "รัฐควรเข้าไปยุ่งเกี่ยวกับชีวิตและเศรษฐกิจของประชาชนให้น้อยที่สุด เปิดโอกาสให้แต่ละคนตัดสินใจและประกอบกิจการได้อย่างอิสระ ลดกฎระเบียบและภาษีที่ไม่จำเป็น และจำกัดอำนาจรัฐเพื่อคุ้มครองสิทธิและเสรีภาพของแต่ละบุคคล"},
+    {"id": 6, "shade": "ฟาสซิสต์", "title": "รูปแบบที่ 7 : เน้นเอกภาพแห่งชาติ รวมศูนย์อำนาจ และระเบียบวินัยเข้มงวด", "text": "รัฐรวมอำนาจในการกำหนดทิศทางประเทศไว้อย่างเข้มแข็ง ให้ความสำคัญกับความเป็นเอกภาพของชาติ วินัย และการเชื่อฟังอำนาจรัฐ ส่งเสริมเศรษฐกิจที่ตอบสนองเป้าหมายของชาติ และจำกัดความขัดแย้งทางการเมืองเพื่อรักษาความเป็นระเบียบและความมั่นคงของประเทศ"}
 ]
 
 scale_scoring = {
@@ -479,40 +338,48 @@ if st.session_state.page == "home":
     st.markdown("""
         <div class="hero-banner-red">
             <span class="tag-badge-red">POLITICAL SPECTRUM MODEL</span>
-            <h1 style="color:#881337; margin:8px 0; font-weight:700; font-size:26px;">คุณยืนอยู่จุดใดในทางการเมือง?</h1>
-            <p style="color:#475569; font-size:14.5px; margin:auto; line-height:1.6;">
+            <h1 style="color:#881337; margin:8px 0; font-weight:700; font-size:32px;">คุณยืนอยู่จุดใดในทางการเมือง?</h1>
+            <p style="color:#475569; font-size:15px; margin:auto; line-height:1.6; max-width:620px;">
                 ค้นพบจุดยืนและแนวคิดของคุณผ่านแบบทดสอบ 15 ข้อ ครอบคลุมอุดมการณ์ทางการเมือง พร้อมคำถามตัดสินรัฐบาลในฝัน
             </p>
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <div class="main-card-light">
-        <h4 style="margin-top:0; color:#0f172a; font-weight:700;">แบบประเมินจุดยืนทางการเมือง 15 ข้อ</h4>
-        <p style="color:#64748b; font-size:14px; line-height:1.6;">
-            • <b>ข้อ 1–14:</b> ประเมินระดับความคิดเห็นต่อประเด็นทางสังคมและเศรษฐกิจ<br>
-            • <b>ข้อ 15:</b> ตัวตัดสินรูปแบบรัฐบาลในฝันที่คุณเห็นด้วยมากที่สุด
-        </p>
-        <div style="background:#fff1f2; padding:10px 14px; border-radius:12px; font-weight:600; color:#be123c; font-size:13px; border:1px solid #fecdd3; display:inline-block; margin-top:6px;">
-            ⏱ ใช้เวลาตอบประมาณ 3 นาที
+    c1, c2 = st.columns([1.8, 1.2])
+    with c1:
+        st.markdown("""
+        <div class="main-card-light" style="height:100%;">
+            <h4 style="margin-top:0; color:#0f172a; font-weight:700; font-size:18px;">แบบประเมินจุดยืนทางการเมือง 15 ข้อ</h4>
+            <p style="color:#64748b; font-size:14.5px; line-height:1.6;">
+                • <b>ข้อ 1–14:</b> ประเมินระดับความคิดเห็นต่อประเด็นทางสังคมและเศรษฐกิจ<br>
+                • <b>ข้อ 15:</b> ตัวตัดสินรูปแบบรัฐบาลในฝันที่คุณเห็นด้วยมากที่สุด
+            </p>
+            <div style="background:#fff1f2; padding:8px 14px; border-radius:12px; font-weight:600; color:#be123c; font-size:13px; border:1px solid #fecdd3; display:inline-block; margin-top:8px;">
+                ⏱ ใช้เวลาตอบประมาณ 3 นาที
+            </div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    if st.button("🚀 เริ่มทำแบบทดสอบ", use_container_width=True, type="primary"):
-        st.session_state.page = "quiz"
-        st.session_state.current_q = 0
-        st.session_state.answers = {}
-        st.rerun()
+        """, unsafe_allow_html=True)
+    with c2:
+        st.markdown("""
+        <div class="main-card-light" style="text-align:center; background:#be123c; color:white; padding:30px 20px; border:none;">
+            <div style="font-size:54px; font-weight:800; color:#ffffff; line-height:1;">15</div>
+            <div style="color:#fecdd3; font-size:14px; margin-top:8px;">คำถามประเมินจุดยืน</div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("🚀 เริ่มทำแบบทดสอบ", use_container_width=True, type="primary"):
+            st.session_state.page = "quiz"
+            st.session_state.current_q = 0
+            st.session_state.answers = {}
+            st.rerun()
 
 # =======================================================
-# 2. หน้าคำถาม (Quiz Screen: สะอาดตา ข้อ 15 ติ๊กตรงข้อความ)
+# 2. หน้าคำถาม (Quiz Screen)
 # =======================================================
 elif st.session_state.page == "quiz":
     q_idx = st.session_state.current_q
     q_data = questions_15[q_idx]
 
-    c_back, c_prog = st.columns([1.2, 3.8])
+    c_back, c_prog = st.columns([1.2, 4.8])
     with c_back:
         if st.button("← หน้าแรก", use_container_width=True, type="secondary"):
             st.session_state.page = "home"
@@ -524,11 +391,11 @@ elif st.session_state.page == "quiz":
     st.markdown(f"""
     <div class="main-card-light">
         <div style="color:#64748b; font-size:13.5px; font-weight:500;">ข้อที่ {q_idx + 1} จาก {len(questions_15)}</div>
-        <h3 style="color:#0f172a; margin-top:8px; font-size:19px; line-height:1.55; font-weight:700;">“{q_data['q']}”</h3>
+        <h3 style="color:#0f172a; margin-top:8px; font-size:20px; line-height:1.55; font-weight:700;">“{q_data['q']}”</h3>
     """, unsafe_allow_html=True)
 
     if q_data["type"] == "scale":
-        st.markdown("<div style='font-weight:600; color:#334155; margin-bottom:10px; font-size:14px;'>เลือกระดับความคิดเห็นของคุณ:</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-weight:600; color:#334155; margin-bottom:10px; font-size:14.5px;'>เลือกระดับความคิดเห็นของคุณ:</div>", unsafe_allow_html=True)
         cur_ans = st.session_state.answers.get(q_idx, 0.50)
         choice = st.radio(
             "ระดับความคิดเห็น",
@@ -540,11 +407,8 @@ elif st.session_state.page == "quiz":
         st.session_state.answers[q_idx] = choice
         st.markdown("</div>", unsafe_allow_html=True)
     else:
-        # ข้อ 15: ออกแบบให้มีหัวข้อรูปแบบชัดเจน พร้อมเนื้อหาตรงกับช่องติ๊ก
-        st.markdown("<div style='font-weight:600; color:#be123c; margin-bottom:12px; font-size:14px;'>เลือก 1 รูปแบบที่ตรงกับแนวทางในฝันของคุณมากที่สุด:</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-weight:600; color:#be123c; margin-bottom:12px; font-size:14.5px;'>เลือก 1 รูปแบบที่ตรงกับแนวทางในฝันของคุณมากที่สุด:</div>", unsafe_allow_html=True)
         cur_ans = st.session_state.answers.get(q_idx, 0)
-        
-        # ฟังก์ชันแสดงผลข้อความในตัวเลือกให้ตรงและอ่านง่ายบนมือถือ
         choice_idx = st.radio(
             "เลือกแนวทางของรัฐบาลในฝัน",
             range(len(q15_options)),
@@ -571,7 +435,7 @@ elif st.session_state.page == "quiz":
                 st.rerun()
 
 # =======================================================
-# 3. หน้าผลลัพธ์ (Result Screen)
+# 3. หน้าผลลัพธ์ (Result Screen: แบ่งสัดส่วนคอลัมน์สมบูรณ์แบบ)
 # =======================================================
 elif st.session_state.page == "result":
     shade_scores = {
@@ -584,14 +448,12 @@ elif st.session_state.page == "result":
         "ฟาสซิสต์": 0.0
     }
 
-    # รวมคะแนนข้อ 1-14
     for i in range(14):
         q = questions_15[i]
         s_name = q["shade"]
         ans_val = st.session_state.answers.get(i, 0.50)
         shade_scores[s_name] += float(ans_val)
 
-    # โบนัสข้อ 15
     q15_selected_idx = st.session_state.answers.get(14, 0)
     bonus_shade = q15_options[q15_selected_idx]["shade"]
     shade_scores[bonus_shade] += 2.0
@@ -599,57 +461,76 @@ elif st.session_state.page == "result":
     best_shade = max(shade_scores, key=shade_scores.get)
     profile_data = spectrum_master[best_shade]
 
-    # ส่วนหัวสรุป: ตัดคำว่า "เฉด" และตัวเลขคะแนนออกทั้งหมด
+    # ส่วนหัวผลลัพธ์
     st.markdown(f"""
         <div class="hero-banner-red">
             <span class="tag-badge-red">POLITICAL SPECTRUM RESULT</span>
-            <h2 style="color:#881337; margin:6px 0 10px 0; font-size:26px; font-weight:800;">{profile_data['title']}</h2>
-            <p style="color:#475569; font-size:14px; max-width:680px; margin:0 auto; line-height:1.6;">{profile_data['desc']}</p>
+            <h1 style="color:#881337; margin:8px 0 12px 0; font-size:32px; font-weight:800;">{profile_data['title']}</h1>
+            <p style="color:#475569; font-size:15px; max-width:680px; margin:0 auto; line-height:1.65;">{profile_data['desc']}</p>
         </div>
     """, unsafe_allow_html=True)
 
-    # กราฟใยแมงมุม (กำหนดป้ายกำกับภาษาอังกฤษย่อเพื่อเลี่ยงปัญหาฟอนต์สี่เหลี่ยมบน Linux Cloud)
-    st.markdown("""
-    <div class="main-card-light">
-        <h4 style="margin-top:0; color:#0f172a; font-weight:700;">📊 ระดับความสอดคล้องกับแนวคิด</h4>
-    """, unsafe_allow_html=True)
+    # แบ่ง 2 คอลัมน์สำหรับ "สรุปคะแนน" และ "กราฟใยแมงมุม"
+    col_stat, col_chart = st.columns([1.1, 1.4])
+    with col_stat:
+        st.markdown("""
+        <div class="main-card-light" style="height:100%;">
+            <h4 style="margin-top:0; color:#0f172a; font-weight:700;">📊 สรุปความสอดคล้องกับอุดมการณ์</h4>
+        """, unsafe_allow_html=True)
 
-    # กำหนดป้ายกำกับ 2 ภาษา (แสดงไทยด้านล่างและใช้ตัวอักษรมาตรฐานที่เรนเดอร์ได้ 100%)
-    radar_labels_en = [
-        'Communism',
-        'Socialism',
-        'Liberalism',
-        'Centrism',
-        'Conservatism',
-        'Libertarianism',
-        'Fascism'
-    ]
-    radar_values = list(shade_scores.values())
+        for s_name in shade_scores.keys():
+            is_best = (s_name == best_shade)
+            color = "#e11d48" if is_best else "#64748b"
+            weight = "700" if is_best else "500"
+            st.markdown(f"""
+            <div style="display:flex; justify-content:space-between; margin:10px 0; font-size:14.5px;">
+                <span style="color:{color}; font-weight:{weight};">{'⭐ ' if is_best else '• '}{s_name}</span>
+                <span style="color:{color}; font-weight:{weight};">{'สอดคล้องสูงสุด' if is_best else 'ทั่วไป'}</span>
+            </div>
+            """, unsafe_allow_html=True)
 
-    radar_labels_plot = radar_labels_en + [radar_labels_en[0]]
-    radar_values_plot = radar_values + [radar_values[0]]
+        st.markdown(f"""
+            <div style="margin-top:16px; padding-top:12px; border-top:1px solid #f1f5f9; font-size:13.5px; color:#475569;">
+                <b>รูปแบบที่เลือกในข้อตัดสิน:</b> <span style="color:#be123c; font-weight:600;">{bonus_shade}</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-    N = len(radar_labels_en)
-    angles = [n / float(N) * 2 * math.pi for n in range(N)]
-    angles += angles[:1]
+    with col_chart:
+        st.markdown("""
+        <div class="main-card-light" style="display:flex; flex-direction:column; align-items:center;">
+            <div style="font-weight:700; color:#0f172a; font-size:15px; margin-bottom:8px;">📊 แผนภาพเปรียบเทียบระดับความสอดคล้อง</div>
+        """, unsafe_allow_html=True)
+        
+        radar_labels_en = [
+            'Communism', 'Socialism', 'Liberalism', 'Centrism',
+            'Conservatism', 'Libertarianism', 'Fascism'
+        ]
+        radar_values = list(shade_scores.values())
+        radar_labels_plot = radar_labels_en + [radar_labels_en[0]]
+        radar_values_plot = radar_values + [radar_values[0]]
 
-    fig, ax = plt.subplots(figsize=(4.2, 3.8), subplot_kw=dict(polar=True), facecolor='#ffffff')
-    ax.set_facecolor('#ffffff')
-    ax.set_theta_offset(math.pi / 2)
-    ax.set_theta_direction(-1)
+        N = len(radar_labels_en)
+        angles = [n / float(N) * 2 * math.pi for n in range(N)]
+        angles += angles[:1]
 
-    plt.xticks(angles[:-1], radar_labels_plot[:-1], size=8, color='#334155', fontweight='bold')
-    ax.set_rlabel_position(0)
-    plt.yticks([1, 2, 3, 4, 5, 6], ["", "", "", "", "", ""], color="#94a3b8")
-    plt.ylim(0, 6)
+        fig, ax = plt.subplots(figsize=(4.0, 3.6), subplot_kw=dict(polar=True), facecolor='#ffffff')
+        ax.set_facecolor('#ffffff')
+        ax.set_theta_offset(math.pi / 2)
+        ax.set_theta_direction(-1)
 
-    ax.plot(angles, radar_values_plot, linewidth=2.2, color='#e11d48')
-    ax.fill(angles, radar_values_plot, color='#fb7185', alpha=0.35)
+        plt.xticks(angles[:-1], radar_labels_plot[:-1], size=8, color='#334155', fontweight='bold')
+        ax.set_rlabel_position(0)
+        plt.yticks([1, 2, 3, 4, 5, 6], ["", "", "", "", "", ""], color="#94a3b8")
+        plt.ylim(0, 6)
 
-    st.pyplot(fig)
-    st.markdown("</div>", unsafe_allow_html=True)
+        ax.plot(angles, radar_values_plot, linewidth=2.2, color='#e11d48')
+        ax.fill(angles, radar_values_plot, color='#fb7185', alpha=0.35)
 
-    # ----------------- การ์ดบุคคลสำคัญ 3 ท่าน (รูปเท่ากัน 100%) -----------------
+        st.pyplot(fig)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # ----------------- การ์ดบุคคลสำคัญ 3 คอลัมน์ (แสดง 3 ใบเคียงข้างกันบนจอคอม) -----------------
     st.markdown("### 🏛 นักคิดและบุคคลสำคัญที่สอดคล้องกับคุณ")
     st.caption(f"ตัวแทนทางความคิดทั้งด้านนักคิด ปรัชญา และผู้นำในกลุ่มแนวคิด: {best_shade}")
 
@@ -663,28 +544,31 @@ elif st.session_state.page == "result":
         {"badge_title": "🧭 ภาพรวม: ตัวแทนอุดมการณ์", "match": "95% Alignment", "data": p3}
     ]
 
-    for card in three_cards:
-        p = card["data"]
-        img_b64 = get_image_base64(p["name"])
-        
-        if img_b64:
-            img_tag = f'<div class="person-img-wrapper"><img src="{img_b64}"></div>'
-        else:
-            img_tag = f'<div class="person-img-wrapper" style="background:#fff1f2; border:1px dashed #fecdd3; color:#be123c; font-size:13px;">📷 รูป: {p["name"]}</div>'
-        
-        card_html = f"""
-        <div class="person-card-complete">
-            <div>
-                <div style="font-size:11.5px; font-weight:700; color:#e11d48; margin-bottom:4px;">{card['badge_title']}</div>
-                <span class="stat-badge-red">{card['match']}</span>
-                <h4 style="margin:6px 0 2px 0; color:#0f172a; font-size:16px; font-weight:700;">{p['name']}</h4>
-                <div style="font-size:12.5px; color:#64748b; line-height:1.4;">{p['role']}</div>
+    # คืนค่า st.columns(3) เพื่อให้จอคอมเรียง 3 คอลัมน์สวยงาม และมือถือจะปรับเป็น Responsive อัตโนมัติ
+    cols = st.columns(3)
+    for idx, card in enumerate(three_cards):
+        with cols[idx]:
+            p = card["data"]
+            img_b64 = get_image_base64(p["name"])
+            
+            if img_b64:
+                img_tag = f'<div class="person-img-wrapper"><img src="{img_b64}"></div>'
+            else:
+                img_tag = f'<div class="person-img-wrapper" style="background:#fff1f2; border:1px dashed #fecdd3; color:#be123c; font-size:13px;">📷 รูป: {p["name"]}</div>'
+            
+            card_html = f"""
+            <div class="person-card-complete">
+                <div>
+                    <div style="font-size:11px; font-weight:700; color:#e11d48; margin-bottom:4px;">{card['badge_title']}</div>
+                    <span class="stat-badge-red">{card['match']}</span>
+                    <h4 style="margin:6px 0 2px 0; color:#0f172a; font-size:16px; font-weight:700;">{p['name']}</h4>
+                    <div style="font-size:12px; color:#64748b; line-height:1.4;">{p['role']}</div>
+                </div>
+                {img_tag}
+                <div class="quote-box-red">{p['quote']}</div>
             </div>
-            {img_tag}
-            <div class="quote-box-red">{p['quote']}</div>
-        </div>
-        """
-        st.markdown(card_html, unsafe_allow_html=True)
+            """
+            st.markdown(card_html, unsafe_allow_html=True)
 
     st.write("")
     if st.button("🔄 ทำแบบประเมินใหม่อีกครั้ง", use_container_width=True, type="secondary"):
