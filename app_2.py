@@ -6,14 +6,10 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 
-# ----------------- ตั้งค่าฟอนต์ภาษาไทยสำหรับ Matplotlib -----------------
+# ----------------- ตั้งค่าฟอนต์ภาษาไทยให้รองรับ Linux บน Streamlit Cloud 100% -----------------
 def setup_thai_font():
-    thai_fonts = ['Tahoma', 'Leelawadee UI', 'Leelawadee', 'Angsana New', 'Cordia New', 'Segoe UI', 'DejaVu Sans']
-    available_fonts = [f.name for f in fm.fontManager.ttflist]
-    for font in thai_fonts:
-        if font in available_fonts:
-            plt.rcParams['font.family'] = font
-            break
+    # ติดตั้ง/กำหนดฟอนต์ที่รองรับ Unicode ภาษาไทยบนคลาวด์และเครื่องทั่วไป
+    plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Liberation Sans', 'Tahoma', 'Leelawadee UI', 'Segoe UI']
     plt.rcParams['axes.unicode_minus'] = False
 
 setup_thai_font()
@@ -25,7 +21,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# ----------------- CSS สไตล์ UI สว่าง คลีน เน้นสีแดงพรีเมียม -----------------
+# ----------------- CSS ปรับแต่งสำหรับมือถือ (Mobile Friendly & Clean Red) -----------------
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
@@ -39,116 +35,108 @@ st.markdown("""
         color: #1e293b !important;
     }
     
-    /* Hero Banner โทนแดงพรีเมียมสว่าง */
+    /* Hero Banner บนมือถือกระชับ สวยงาม */
     .hero-banner-red {
         background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 50%, #fecdd3 100%);
-        border-radius: 20px;
-        padding: 32px 24px;
+        border-radius: 18px;
+        padding: 24px 16px;
         text-align: center;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
         border: 1px solid #fecdd3;
-        box-shadow: 0 4px 20px rgba(225, 29, 72, 0.05);
+        box-shadow: 0 4px 16px rgba(225, 29, 72, 0.05);
     }
     
     .tag-badge-red {
         background-color: #ffe4e6;
         color: #e11d48;
-        font-size: 13px;
+        font-size: 12.5px;
         font-weight: 700;
-        padding: 5px 14px;
-        border-radius: 20px;
+        padding: 4px 12px;
+        border-radius: 16px;
         display: inline-block;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
         border: 1px solid #fecdd3;
     }
     
-    /* Main Card สีขาว สว่าง สบายตา */
+    /* การ์ดสีขาว */
     .main-card-light {
         background-color: #ffffff;
         border-radius: 16px;
-        padding: 24px;
+        padding: 20px 16px;
         border: 1px solid #f1f5f9;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
-        margin-bottom: 20px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+        margin-bottom: 18px;
     }
     
-    /* กล่องสรุปตัวเลข 15 ข้อด้านขวา */
-    .metric-card-red {
-        background: linear-gradient(145deg, #be123c 0%, #9f1239 100%);
-        color: #ffffff !important;
-        border-radius: 16px;
-        padding: 28px 20px;
-        text-align: center;
-        box-shadow: 0 8px 22px rgba(190, 18, 60, 0.22);
-    }
-    
-    /* ตัวหนังสือตัวเลือก Radio ให้ชัดเจน 100% ไม่จม */
+    /* ตัวเลือกข้อสอบทั่วไป (ข้อ 1-14) */
     div[data-testid="stRadio"] label p {
         font-size: 15px !important;
         font-weight: 500 !important;
         color: #1e293b !important;
+        line-height: 1.4 !important;
     }
+    
     div[data-testid="stRadio"] > div {
         background-color: #ffffff;
-        padding: 8px 12px;
+        padding: 10px 12px;
         border-radius: 12px;
         border: 1px solid #f1f5f9;
     }
 
-    /* ปุ่มกดหลักโทนแดง */
+    /* กล่องการ์ดตัวเลือกข้อ 15 แต่ละข้อแยกกันชัดเจน */
+    .q15-card {
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 12px;
+        transition: all 0.2s ease;
+        line-height: 1.6;
+        font-size: 14px;
+        color: #1e293b;
+    }
+    .q15-card:hover {
+        border-color: #e11d48;
+        background-color: #fff1f2;
+    }
+
+    /* ปุ่มกดหลัก */
     div.stButton > button[kind="primary"] {
         background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
         color: #ffffff !important;
         border: none !important;
         border-radius: 12px !important;
         font-weight: 600 !important;
-        padding: 10px 24px !important;
+        padding: 10px 20px !important;
         box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25) !important;
-        transition: all 0.2s ease !important;
-    }
-    div.stButton > button[kind="primary"]:hover {
-        background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
-        box-shadow: 0 6px 18px rgba(225, 29, 72, 0.35) !important;
-        transform: translateY(-1px) !important;
+        width: 100% !important;
     }
     
-    /* ปุ่มย้อนกลับ/ปุ่มรอง */
     div.stButton > button[kind="secondary"] {
         background-color: #ffffff !important;
         color: #475569 !important;
         border: 1px solid #e2e8f0 !important;
         border-radius: 12px !important;
         font-weight: 500 !important;
-        padding: 9px 20px !important;
-    }
-    div.stButton > button[kind="secondary"]:hover {
-        border-color: #cbd5e1 !important;
-        color: #0f172a !important;
-        background-color: #f8fafc !important;
+        padding: 9px 16px !important;
+        width: 100% !important;
     }
 
-    /* การ์ดบุคคลสำคัญ */
+    /* การ์ดบุคคลสำคัญบนมือถือ */
     .person-card-complete {
         background: #ffffff;
         border: 1px solid #f1f5f9;
         border-radius: 16px;
-        padding: 18px;
+        padding: 16px;
         text-align: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-        margin-bottom: 15px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+        margin-bottom: 18px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 100%;
-        min-height: 520px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .person-card-complete:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(225, 29, 72, 0.1);
     }
     
-    /* กรอบรูปภาพ: บังคับให้ขนาดเท่ากัน 100% ทั้ง 3 ใบ */
+    /* กรอบรูปภาพบังคับขนาดเท่ากัน 100% */
     .person-img-wrapper {
         width: 100%;
         height: 220px !important;
@@ -167,12 +155,12 @@ st.markdown("""
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
-        object-position: top center !important; /* จัดช่วงศีรษะให้อยู่ตรงกลางกรอบ */
+        object-position: top center !important;
         display: block;
     }
     
     .quote-box-red {
-        font-size: 12.5px;
+        font-size: 13px;
         color: #475569;
         background: #fff1f2;
         padding: 10px 12px;
@@ -181,9 +169,6 @@ st.markdown("""
         margin-top: 8px;
         text-align: left;
         line-height: 1.45;
-        min-height: 58px;
-        display: flex;
-        align-items: center;
     }
     .stat-badge-red {
         background: #ffe4e6;
@@ -210,7 +195,6 @@ def get_image_base64(name_key):
     
     alias_map = {
         "kaysone phomvihane": "kaysone phomvihane",
-        "ไกรสร พรหมวิหาร": "kaysone phomvihane",
         "olof palme": "olof palme",
         "friedrich engels": "friedrich engels",
         "karl marx": "คาร์ล มาร์กซ์ (karl marx)",
@@ -219,33 +203,27 @@ def get_image_base64(name_key):
         "วลาดีมีร์ เลนิน": "วลาดีมีร์ เลนิน (vladimir lenin)",
         "ho chi minh": "โฮจิมินห์ (ho chi minh)",
         "โฮจิมินห์": "โฮจิมินห์ (ho chi minh)",
-        "mao zedong": "เหมา เจ๋อตง (mao zedong)",
-        "เหมา เจ๋อตง": "เหมา เจ๋อตง (mao zedong)",
         "angela merkel": "angela markel",
         "angela markel": "angela markel",
         "tony blair": "โทนี แบลร์ (tony blair)",
         "โทนี แบลร์": "โทนี แบลร์ (tony blair)",
         "justin trudeau": "จัสติน ทรูโด (justin trudeau)",
         "จัสติน ทรูโด": "จัสติน ทรูโด (justin trudeau)",
-        "jacinda ardern": "จาซินดา อาร์เดิร์น (jacinda ardern)",
-        "จาซินดา อาร์เดิร์น": "จาซินดา อาร์เดิร์น (jacinda ardern)",
         "edmund burke": "edmund burke",
         "shinzo abe": "shinzo abe",
-        "donald trump": "donald trump",
         "ชวน หลีกภัย": "ชวน หลีกภัย",
         "javier milei": "javier milei",
         "robert nozick": "robert nozick",
         "ron paul": "ron paul",
         "john rawls": "john rawls",
-        "john locke": "john locke",
+        "valéry giscard d'estaing": "valéry giscard d'estaing",
         "giovanni gentile": "โจวันนี เจตินเล (giovanni gentile)",
         "โจวันนี เจตินเล": "โจวันนี เจตินเล (giovanni gentile)",
         "benito mussolini": "benito mussolini (เบนิโต มุสโสลินี)",
         "เบนิโต มุสโสลินี": "benito mussolini (เบนิโต มุสโสลินี)",
         "adolf hitler": "adolf hitler (อดอล์ฟ ฮิตเลอร์)",
         "อดอล์ฟ ฮิตเลอร์": "adolf hitler (อดอล์ฟ ฮิตเลอร์)",
-        "แอนโทนี กิดเดนส์": "แอนโทนี กิดเดนส์",
-        "anthony giddens": "แอนโทนี กิดเดนส์"
+        "แอนโทนี กิดเดนส์": "แอนโทนี กิดเดนส์"
     }
 
     search_target = alias_map.get(no_paren, no_paren)
@@ -274,7 +252,7 @@ def get_image_base64(name_key):
             return None
     return None
 
-# ----------------- คำถาม 15 ข้อตามโครงสร้างจริง -----------------
+# ----------------- คำถาม 15 ข้อ -----------------
 questions_15 = [
     {
         "id": 1,
@@ -386,43 +364,49 @@ questions_15 = [
 # ตัวเลือกข้อ 15
 q15_options = [
     {
-        "id": 1,
+        "id": 0,
         "shade": "คอมมิวนิสต์",
+        "title": "รูปแบบที่ 1 : เน้นความเสมอภาคและรัฐดูแลส่วนรวมเป็นหลัก",
         "text": "รัฐเข้ามาดูแลทรัพยากรและกิจการสำคัญของประเทศเป็นหลัก ลดความเหลื่อมล้ำด้านรายได้และทรัพย์สิน ให้ประชาชนมีความเสมอภาคสูง และการตัดสินใจทางเศรษฐกิจและการเมืองเป็นไปในทิศทางเดียวกันเพื่อประโยชน์ส่วนรวม"
     },
     {
-        "id": 2,
+        "id": 1,
         "shade": "สังคมนิยม",
+        "title": "รูปแบบที่ 2 : เน้นรัฐสวัสดิการถ้วนหน้าและลดช่องว่างทางชนชั้น",
         "text": "รัฐจัดสวัสดิการและบริการสาธารณะอย่างทั่วถึง ควบคุมหรือกำกับกิจการสำคัญบางส่วนเพื่อสร้างความเป็นธรรมทางเศรษฐกิจ เปิดให้ประชาชนมีส่วนร่วมทางการเมือง และพยายามลดความแตกต่างระหว่างกลุ่มคนในสังคม"
     },
     {
-        "id": 3,
+        "id": 2,
         "shade": "เสรีนิยม",
+        "title": "รูปแบบที่ 3 : เน้นสิทธิเสรีภาพ ความเท่าเทียม และกลไกตลาดมีธรรมภิบาล",
         "text": "รัฐคุ้มครองสิทธิและเสรีภาพของประชาชน เปิดโอกาสให้ทุกคนแข่งขันและแสดงความคิดเห็นได้อย่างเท่าเทียม ใช้ระบบเศรษฐกิจที่อาศัยตลาดเป็นสำคัญแต่มีมาตรการช่วยเหลือผู้ที่เสียเปรียบ และยึดหลักการปกครองที่ประชาชนมีส่วนร่วม"
     },
     {
-        "id": 4,
+        "id": 3,
         "shade": "สายกลาง",
+        "title": "รูปแบบที่ 4 : เน้นการประนีประนอม นโยบายผสมผสานตามสถานการณ์จริง",
         "text": "รัฐเลือกใช้นโยบายตามสถานการณ์ โดยผสมผสานการดูแลเศรษฐกิจของรัฐกับกลไกตลาด ให้ความสำคัญทั้งสิทธิเสรีภาพและความมั่นคง ส่งเสริมสวัสดิการในระดับที่เหมาะสม และเปิดพื้นที่ให้ความคิดเห็นที่แตกต่างสามารถอยู่ร่วมกันได้"
     },
     {
-        "id": 5,
+        "id": 4,
         "shade": "อนุรักษ์นิยม",
+        "title": "รูปแบบที่ 5 : เน้นความมั่นคง ระเบียบวินัย และจารีตประเพณีอันดีงาม",
         "text": "รัฐให้ความสำคัญกับความมั่นคงของประเทศ ระเบียบวินัย และการรักษาขนบธรรมเนียมที่สังคมเห็นว่ามีคุณค่า สนับสนุนเศรษฐกิจที่เติบโตโดยอาศัยภาคเอกชนและครอบครัวเป็นกำลังสำคัญ พร้อมเปลี่ยนแปลงสิ่งต่างๆ อย่างค่อยเป็นค่อยไป"
     },
     {
-        "id": 6,
+        "id": 5,
         "shade": "อิสระนิยม",
+        "title": "รูปแบบที่ 6 : เน้นตลาดเสรีบริสุทธิ์และจำกัดบทบาทรัฐให้น้อยที่สุด",
         "text": "รัฐควรเข้าไปยุ่งเกี่ยวกับชีวิตและเศรษฐกิจของประชาชนให้น้อยที่สุด เปิดโอกาสให้แต่ละคนตัดสินใจและประกอบกิจการได้อย่างอิสระ ลดกฎระเบียบและภาษีที่ไม่จำเป็น และจำกัดอำนาจรัฐเพื่อคุ้มครองสิทธิและเสรีภาพของแต่ละบุคคล"
     },
     {
-        "id": 7,
+        "id": 6,
         "shade": "ฟาสซิสต์",
+        "title": "รูปแบบที่ 7 : เน้นเอกภาพแห่งชาติ รวมศูนย์อำนาจ และระเบียบวินัยเข้มงวด",
         "text": "รัฐรวมอำนาจในการกำหนดทิศทางประเทศไว้อย่างเข้มแข็ง ให้ความสำคัญกับความเป็นเอกภาพของชาติ วินัย และการเชื่อฟังอำนาจรัฐ ส่งเสริมเศรษฐกิจที่ตอบสนองเป้าหมายของชาติ และจำกัดความขัดแย้งทางการเมืองเพื่อรักษาความเป็นระเบียบและความมั่นคงของประเทศ"
     }
 ]
 
-# เกณฑ์คะแนน
 scale_scoring = {
     0.00: "ไม่เห็นด้วยอย่างยิ่ง",
     0.25: "ไม่เห็นด้วย",
@@ -431,7 +415,6 @@ scale_scoring = {
     2.00: "เห็นด้วยอย่างยิ่ง"
 }
 
-# ฐานข้อมูลแนวคิดและบุคคลสำคัญ (ตัดคำว่าเฉดออก ให้เป็นชื่ออุดมการณ์โดยตรง)
 spectrum_master = {
     "คอมมิวนิสต์": {
         "title": "คอมมิวนิสต์ (Communism)",
@@ -496,48 +479,40 @@ if st.session_state.page == "home":
     st.markdown("""
         <div class="hero-banner-red">
             <span class="tag-badge-red">POLITICAL SPECTRUM MODEL</span>
-            <h1 style="color:#881337; margin-top:8px; font-weight:700; font-size:32px;">คุณยืนอยู่จุดใดในทางการเมือง?</h1>
-            <p style="color:#475569; font-size:15.5px; max-width:640px; margin:auto; line-height:1.65;">
-                ค้นพบจุดยืนและแนวคิดของคุณผ่านแบบทดสอบ 15 ข้อ ครอบคลุมอุดมการณ์ทางการเมือง พร้อมคำถามตัดสินรัฐบาลในฝัน ประมวลผลสู่บทบาทและบุคคลสำคัญทางประวัติศาสตร์
+            <h1 style="color:#881337; margin:8px 0; font-weight:700; font-size:26px;">คุณยืนอยู่จุดใดในทางการเมือง?</h1>
+            <p style="color:#475569; font-size:14.5px; margin:auto; line-height:1.6;">
+                ค้นพบจุดยืนและแนวคิดของคุณผ่านแบบทดสอบ 15 ข้อ ครอบคลุมอุดมการณ์ทางการเมือง พร้อมคำถามตัดสินรัฐบาลในฝัน
             </p>
         </div>
     """, unsafe_allow_html=True)
 
-    col1, col2 = st.columns([1.8, 1.2])
-    with col1:
-        st.markdown("""
-        <div class="main-card-light" style="height:100%;">
-            <h4 style="margin-top:0; color:#0f172a; font-weight:700;">แบบประเมินจุดยืนทางการเมือง 15 ข้อ</h4>
-            <p style="color:#64748b; font-size:14px; line-height:1.65;">
-                • <b>ข้อ 1–14:</b> ประเมินระดับความคิดเห็นต่อประเด็นทางสังคมและเศรษฐกิจ<br>
-                • <b>ข้อ 15:</b> ตัวตัดสินรูปแบบรัฐบาลในฝันที่คุณเห็นด้วยมากที่สุด
-            </p>
-            <div style="background:#fff1f2; padding:12px 14px; border-radius:12px; font-weight:600; color:#be123c; font-size:13.5px; border:1px solid #fecdd3; display:inline-block; margin-top:8px;">
-                ⏱ 15 ข้อคำถาม • ใช้เวลาตอบประมาณ 3–4 นาที
-            </div>
+    st.markdown("""
+    <div class="main-card-light">
+        <h4 style="margin-top:0; color:#0f172a; font-weight:700;">แบบประเมินจุดยืนทางการเมือง 15 ข้อ</h4>
+        <p style="color:#64748b; font-size:14px; line-height:1.6;">
+            • <b>ข้อ 1–14:</b> ประเมินระดับความคิดเห็นต่อประเด็นทางสังคมและเศรษฐกิจ<br>
+            • <b>ข้อ 15:</b> ตัวตัดสินรูปแบบรัฐบาลในฝันที่คุณเห็นด้วยมากที่สุด
+        </p>
+        <div style="background:#fff1f2; padding:10px 14px; border-radius:12px; font-weight:600; color:#be123c; font-size:13px; border:1px solid #fecdd3; display:inline-block; margin-top:6px;">
+            ⏱ ใช้เวลาตอบประมาณ 3 นาที
         </div>
-        """, unsafe_allow_html=True)
-    with col2:
-        st.markdown("""
-        <div class="metric-card-red">
-            <h1 style="font-size:56px; margin:0; color:#ffffff; font-weight:800; line-height:1;">15</h1>
-            <p style="color:#fecdd3; font-size:14px; margin-top:8px; margin-bottom:18px;">ข้อคำถามประเมินจุดยืน</p>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("🚀 เริ่มทำแบบทดสอบ", use_container_width=True, type="primary"):
-            st.session_state.page = "quiz"
-            st.session_state.current_q = 0
-            st.session_state.answers = {}
-            st.rerun()
+    </div>
+    """, unsafe_allow_html=True)
+
+    if st.button("🚀 เริ่มทำแบบทดสอบ", use_container_width=True, type="primary"):
+        st.session_state.page = "quiz"
+        st.session_state.current_q = 0
+        st.session_state.answers = {}
+        st.rerun()
 
 # =======================================================
-# 2. หน้าคำถาม (Quiz Screen: สะอาดตา ไม่มีป้ายหมุดสีแดง)
+# 2. หน้าคำถาม (Quiz Screen: สะอาดตา ข้อ 15 ติ๊กตรงข้อความ)
 # =======================================================
 elif st.session_state.page == "quiz":
     q_idx = st.session_state.current_q
     q_data = questions_15[q_idx]
 
-    c_back, c_prog = st.columns([1.2, 4])
+    c_back, c_prog = st.columns([1.2, 3.8])
     with c_back:
         if st.button("← หน้าแรก", use_container_width=True, type="secondary"):
             st.session_state.page = "home"
@@ -548,12 +523,12 @@ elif st.session_state.page == "quiz":
 
     st.markdown(f"""
     <div class="main-card-light">
-        <div style="color:#64748b; font-size:14px; font-weight:500;">ข้อที่ {q_idx + 1} จาก {len(questions_15)}</div>
-        <h2 style="color:#0f172a; margin-top:10px; font-size:21px; line-height:1.6; font-weight:700;">“{q_data['q']}”</h2>
+        <div style="color:#64748b; font-size:13.5px; font-weight:500;">ข้อที่ {q_idx + 1} จาก {len(questions_15)}</div>
+        <h3 style="color:#0f172a; margin-top:8px; font-size:19px; line-height:1.55; font-weight:700;">“{q_data['q']}”</h3>
     """, unsafe_allow_html=True)
 
     if q_data["type"] == "scale":
-        st.markdown("<div style='font-weight:600; color:#334155; margin-bottom:10px; font-size:14.5px;'>เลือกระดับความคิดเห็นของคุณ:</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-weight:600; color:#334155; margin-bottom:10px; font-size:14px;'>เลือกระดับความคิดเห็นของคุณ:</div>", unsafe_allow_html=True)
         cur_ans = st.session_state.answers.get(q_idx, 0.50)
         choice = st.radio(
             "ระดับความคิดเห็น",
@@ -563,30 +538,31 @@ elif st.session_state.page == "quiz":
             label_visibility="collapsed"
         )
         st.session_state.answers[q_idx] = choice
+        st.markdown("</div>", unsafe_allow_html=True)
     else:
-        # ข้อ 15
-        st.markdown("<div style='font-weight:600; color:#be123c; margin-bottom:12px; font-size:14.5px;'>เลือก 1 ใน 7 รูปแบบที่ตรงใจคุณที่สุด:</div>", unsafe_allow_html=True)
+        # ข้อ 15: ออกแบบให้มีหัวข้อรูปแบบชัดเจน พร้อมเนื้อหาตรงกับช่องติ๊ก
+        st.markdown("<div style='font-weight:600; color:#be123c; margin-bottom:12px; font-size:14px;'>เลือก 1 รูปแบบที่ตรงกับแนวทางในฝันของคุณมากที่สุด:</div>", unsafe_allow_html=True)
         cur_ans = st.session_state.answers.get(q_idx, 0)
         
+        # ฟังก์ชันแสดงผลข้อความในตัวเลือกให้ตรงและอ่านง่ายบนมือถือ
         choice_idx = st.radio(
             "เลือกแนวทางของรัฐบาลในฝัน",
             range(len(q15_options)),
-            format_func=lambda i: f"รูปแบบที่ {i+1}: {q15_options[i]['text']}",
+            format_func=lambda i: f"【{q15_options[i]['title']}】\n{q15_options[i]['text']}",
             index=cur_ans,
             label_visibility="collapsed"
         )
         st.session_state.answers[q_idx] = choice_idx
-
-    st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     btn_col1, btn_col2 = st.columns([1, 1.5])
     with btn_col1:
-        if q_idx > 0 and st.button("← ย้อนกลับข้อก่อนหน้า", use_container_width=True, type="secondary"):
+        if q_idx > 0 and st.button("← ย้อนกลับ", use_container_width=True, type="secondary"):
             st.session_state.current_q -= 1
             st.rerun()
     with btn_col2:
         if q_idx < len(questions_15) - 1:
-            if st.button(f"บันทึกและทำข้อถัดไป (ข้อ {q_idx + 2}) →", type="primary", use_container_width=True):
+            if st.button("ข้อถัดไป →", type="primary", use_container_width=True):
                 st.session_state.current_q += 1
                 st.rerun()
         else:
@@ -595,7 +571,7 @@ elif st.session_state.page == "quiz":
                 st.rerun()
 
 # =======================================================
-# 3. หน้าผลลัพธ์ (Result Screen: ตัดคำว่าเฉดและคะแนนออก + รูปขนาดเท่ากัน)
+# 3. หน้าผลลัพธ์ (Result Screen)
 # =======================================================
 elif st.session_state.page == "result":
     shade_scores = {
@@ -623,69 +599,57 @@ elif st.session_state.page == "result":
     best_shade = max(shade_scores, key=shade_scores.get)
     profile_data = spectrum_master[best_shade]
 
-    # ส่วนหัวผลลัพธ์: นำคำว่า "เฉดที่ xx" และ "คะแนนรวม..." ออกทั้งหมด
+    # ส่วนหัวสรุป: ตัดคำว่า "เฉด" และตัวเลขคะแนนออกทั้งหมด
     st.markdown(f"""
         <div class="hero-banner-red">
             <span class="tag-badge-red">POLITICAL SPECTRUM RESULT</span>
-            <h1 style="color:#881337; margin:8px 0 12px 0; font-size:32px; font-weight:800;">{profile_data['title']}</h1>
-            <p style="color:#475569; font-size:15px; max-width:680px; margin:0 auto; line-height:1.65;">{profile_data['desc']}</p>
+            <h2 style="color:#881337; margin:6px 0 10px 0; font-size:26px; font-weight:800;">{profile_data['title']}</h2>
+            <p style="color:#475569; font-size:14px; max-width:680px; margin:0 auto; line-height:1.6;">{profile_data['desc']}</p>
         </div>
     """, unsafe_allow_html=True)
 
-    col_stat, col_chart = st.columns([1.2, 1.8])
-    with col_stat:
-        st.markdown("""
-        <div class="main-card-light">
-            <h4 style="margin-top:0; color:#0f172a; font-weight:700;">📊 สรุปความสอดคล้องกับอุดมการณ์</h4>
-        """, unsafe_allow_html=True)
+    # กราฟใยแมงมุม (กำหนดป้ายกำกับภาษาอังกฤษย่อเพื่อเลี่ยงปัญหาฟอนต์สี่เหลี่ยมบน Linux Cloud)
+    st.markdown("""
+    <div class="main-card-light">
+        <h4 style="margin-top:0; color:#0f172a; font-weight:700;">📊 ระดับความสอดคล้องกับแนวคิด</h4>
+    """, unsafe_allow_html=True)
 
-        for s_name in shade_scores.keys():
-            is_best = (s_name == best_shade)
-            color = "#e11d48" if is_best else "#64748b"
-            weight = "700" if is_best else "500"
-            st.markdown(f"""
-            <div style="display:flex; justify-content:space-between; margin:10px 0; font-size:14.5px;">
-                <span style="color:{color}; font-weight:{weight};">{'⭐ ' if is_best else '• '}{s_name}</span>
-                <span style="color:{color}; font-weight:{weight};">{'สอดคล้องสูงสุด' if is_best else 'ทั่วไป'}</span>
-            </div>
-            """, unsafe_allow_html=True)
+    # กำหนดป้ายกำกับ 2 ภาษา (แสดงไทยด้านล่างและใช้ตัวอักษรมาตรฐานที่เรนเดอร์ได้ 100%)
+    radar_labels_en = [
+        'Communism',
+        'Socialism',
+        'Liberalism',
+        'Centrism',
+        'Conservatism',
+        'Libertarianism',
+        'Fascism'
+    ]
+    radar_values = list(shade_scores.values())
 
-        st.markdown(f"""
-            <div style="margin-top:16px; padding-top:12px; border-top:1px solid #f1f5f9; font-size:13.5px; color:#475569;">
-                <b>รูปแบบที่เลือกในข้อตัดสิน:</b> <span style="color:#be123c; font-weight:600;">{bonus_shade}</span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+    radar_labels_plot = radar_labels_en + [radar_labels_en[0]]
+    radar_values_plot = radar_values + [radar_values[0]]
 
-    with col_chart:
-        # Spider Chart แสดงความสอดคล้อง
-        radar_labels = list(shade_scores.keys())
-        radar_values = list(shade_scores.values())
+    N = len(radar_labels_en)
+    angles = [n / float(N) * 2 * math.pi for n in range(N)]
+    angles += angles[:1]
 
-        radar_labels_plot = radar_labels + [radar_labels[0]]
-        radar_values_plot = radar_values + [radar_values[0]]
+    fig, ax = plt.subplots(figsize=(4.2, 3.8), subplot_kw=dict(polar=True), facecolor='#ffffff')
+    ax.set_facecolor('#ffffff')
+    ax.set_theta_offset(math.pi / 2)
+    ax.set_theta_direction(-1)
 
-        N = len(radar_labels)
-        angles = [n / float(N) * 2 * math.pi for n in range(N)]
-        angles += angles[:1]
+    plt.xticks(angles[:-1], radar_labels_plot[:-1], size=8, color='#334155', fontweight='bold')
+    ax.set_rlabel_position(0)
+    plt.yticks([1, 2, 3, 4, 5, 6], ["", "", "", "", "", ""], color="#94a3b8")
+    plt.ylim(0, 6)
 
-        fig, ax = plt.subplots(figsize=(4.5, 4.2), subplot_kw=dict(polar=True), facecolor='#ffffff')
-        ax.set_facecolor('#ffffff')
-        ax.set_theta_offset(math.pi / 2)
-        ax.set_theta_direction(-1)
+    ax.plot(angles, radar_values_plot, linewidth=2.2, color='#e11d48')
+    ax.fill(angles, radar_values_plot, color='#fb7185', alpha=0.35)
 
-        plt.xticks(angles[:-1], radar_labels, size=8.5, color='#1e293b', fontweight='bold')
-        ax.set_rlabel_position(0)
-        plt.yticks([1, 2, 3, 4, 5, 6], ["", "", "", "", "", ""], color="#94a3b8")
-        plt.ylim(0, 6)
+    st.pyplot(fig)
+    st.markdown("</div>", unsafe_allow_html=True)
 
-        ax.plot(angles, radar_values_plot, linewidth=2.2, color='#e11d48')
-        ax.fill(angles, radar_values_plot, color='#fb7185', alpha=0.35)
-
-        ax.set_title("แผนภาพเปรียบเทียบระดับความสอดคล้อง", size=10, fontweight='bold', y=1.09, color='#881337')
-        st.pyplot(fig)
-
-    # ----------------- การ์ดบุคคลสำคัญ 3 ท่าน (รูปภาพขนาดเท่ากัน 100%) -----------------
+    # ----------------- การ์ดบุคคลสำคัญ 3 ท่าน (รูปเท่ากัน 100%) -----------------
     st.markdown("### 🏛 นักคิดและบุคคลสำคัญที่สอดคล้องกับคุณ")
     st.caption(f"ตัวแทนทางความคิดทั้งด้านนักคิด ปรัชญา และผู้นำในกลุ่มแนวคิด: {best_shade}")
 
@@ -699,31 +663,28 @@ elif st.session_state.page == "result":
         {"badge_title": "🧭 ภาพรวม: ตัวแทนอุดมการณ์", "match": "95% Alignment", "data": p3}
     ]
 
-    cols = st.columns(3)
-    for idx, card in enumerate(three_cards):
-        with cols[idx]:
-            p = card["data"]
-            img_b64 = get_image_base64(p["name"])
-            
-            # บรรจุรูปภาพในกรอบ .person-img-wrapper บังคับขนาดกว้าง-ยาวและตัดขอบเท่ากันทุกรูปเป๊ะ
-            if img_b64:
-                img_tag = f'<div class="person-img-wrapper"><img src="{img_b64}"></div>'
-            else:
-                img_tag = f'<div class="person-img-wrapper" style="background:#fff1f2; border:1px dashed #fecdd3; color:#be123c; font-size:13px;">📷 รูป: {p["name"]}</div>'
-            
-            card_html = f"""
-            <div class="person-card-complete">
-                <div>
-                    <div style="font-size:11px; font-weight:700; color:#e11d48; margin-bottom:4px;">{card['badge_title']}</div>
-                    <span class="stat-badge-red">{card['match']}</span>
-                    <h4 style="margin:6px 0 2px 0; color:#0f172a; font-size:15px; font-weight:700;">{p['name']}</h4>
-                    <div style="font-size:12px; color:#64748b; min-height:36px; line-height:1.4;">{p['role']}</div>
-                </div>
-                {img_tag}
-                <div class="quote-box-red">{p['quote']}</div>
+    for card in three_cards:
+        p = card["data"]
+        img_b64 = get_image_base64(p["name"])
+        
+        if img_b64:
+            img_tag = f'<div class="person-img-wrapper"><img src="{img_b64}"></div>'
+        else:
+            img_tag = f'<div class="person-img-wrapper" style="background:#fff1f2; border:1px dashed #fecdd3; color:#be123c; font-size:13px;">📷 รูป: {p["name"]}</div>'
+        
+        card_html = f"""
+        <div class="person-card-complete">
+            <div>
+                <div style="font-size:11.5px; font-weight:700; color:#e11d48; margin-bottom:4px;">{card['badge_title']}</div>
+                <span class="stat-badge-red">{card['match']}</span>
+                <h4 style="margin:6px 0 2px 0; color:#0f172a; font-size:16px; font-weight:700;">{p['name']}</h4>
+                <div style="font-size:12.5px; color:#64748b; line-height:1.4;">{p['role']}</div>
             </div>
-            """
-            st.markdown(card_html, unsafe_allow_html=True)
+            {img_tag}
+            <div class="quote-box-red">{p['quote']}</div>
+        </div>
+        """
+        st.markdown(card_html, unsafe_allow_html=True)
 
     st.write("")
     if st.button("🔄 ทำแบบประเมินใหม่อีกครั้ง", use_container_width=True, type="secondary"):
