@@ -17,10 +17,10 @@ setup_thai_font()
 st.set_page_config(
     page_title="แบบประเมินจุดยืนทางการเมือง 7 อุดมการณ์",
     page_icon="🧭",
-    layout="wide"  # ใช้ Wide layout เพื่อจัดสัดส่วนบนจอคอมพิวเตอร์ได้สมดุล
+    layout="wide"  # ใช้ Wide layout เพื่อไม่ให้หน้าจอบนคอมโดนบีบแคบ
 )
 
-# ----------------- CSS สไตล์ Responsive UI (รองรับทั้งคอมและมือถือ) -----------------
+# ----------------- CSS สไตล์ Responsive UI (สมดุลทั้งคอมและมือถือ) -----------------
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
@@ -34,18 +34,19 @@ st.markdown("""
         color: #1e293b !important;
     }
     
-    /* ควบคุมความกว้างเนื้อหาหลักให้สมดุลบนจอคอม */
+    /* ควบคุมขนาดคอนเทนเนอร์บนจอคอมให้กว้างพอดี ไม่หดแคบเป็นกล่องเล็ก */
     .block-container {
-        max-width: 1080px !important;
+        max-width: 960px !important;
         padding-top: 2rem !important;
         padding-bottom: 3rem !important;
+        margin: 0 auto !important;
     }
     
     /* Hero Banner สว่างพรีเมียม */
     .hero-banner-red {
         background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 50%, #fecdd3 100%);
         border-radius: 20px;
-        padding: 30px 24px;
+        padding: 32px 24px;
         text-align: center;
         margin-bottom: 24px;
         border: 1px solid #fecdd3;
@@ -60,20 +61,21 @@ st.markdown("""
         padding: 5px 14px;
         border-radius: 20px;
         display: inline-block;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         border: 1px solid #fecdd3;
     }
     
-    /* การ์ดสีขาวสว่าง */
+    /* การ์ดเนื้อหา */
     .main-card-light {
         background-color: #ffffff;
         border-radius: 16px;
-        padding: 24px;
+        padding: 24px 28px;
         border: 1px solid #f1f5f9;
         box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
         margin-bottom: 20px;
     }
     
+    /* Radio ตัวเลือกคำถาม */
     div[data-testid="stRadio"] label p {
         font-size: 15px !important;
         font-weight: 500 !important;
@@ -82,9 +84,10 @@ st.markdown("""
     }
     div[data-testid="stRadio"] > div {
         background-color: #ffffff;
-        padding: 10px 14px;
+        padding: 12px 16px;
         border-radius: 12px;
         border: 1px solid #f1f5f9;
+        gap: 12px !important;
     }
 
     /* ปุ่มกดหลักโทนแดง */
@@ -96,7 +99,15 @@ st.markdown("""
         font-weight: 600 !important;
         padding: 10px 24px !important;
         box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25) !important;
+        transition: all 0.2s ease !important;
     }
+    div.stButton > button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
+        box-shadow: 0 6px 18px rgba(225, 29, 72, 0.35) !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    /* ปุ่มย้อนกลับ */
     div.stButton > button[kind="secondary"] {
         background-color: #ffffff !important;
         color: #475569 !important;
@@ -104,6 +115,11 @@ st.markdown("""
         border-radius: 12px !important;
         font-weight: 500 !important;
         padding: 9px 20px !important;
+    }
+    div.stButton > button[kind="secondary"]:hover {
+        border-color: #cbd5e1 !important;
+        color: #0f172a !important;
+        background-color: #f8fafc !important;
     }
 
     /* การ์ดบุคคลสำคัญ 3 ใบ สัดส่วนมาตรฐาน ไม่ยืดแบน */
@@ -117,11 +133,11 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 480px;
+        min-height: 490px;
         margin-bottom: 15px;
     }
     
-    /* ปรับกรอบรูปภาพตามอัตราส่วน ล็อกตำแหน่งใบหน้าตรงกลางพอดี */
+    /* ปรับกรอบรูปภาพให้เท่ากัน 100% พร้อมล็อกตำแหน่งใบหน้า */
     .person-img-wrapper {
         width: 100%;
         aspect-ratio: 4 / 3;
@@ -138,7 +154,7 @@ st.markdown("""
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
-        object-position: center 20% !important; /* จัดให้เห็นศีรษะและใบหน้าชัดเจนพอดี */
+        object-position: center 20% !important; /* จัดโฟกัสช่วงใบหน้าพอดี */
     }
     
     .quote-box-red {
@@ -151,7 +167,7 @@ st.markdown("""
         margin-top: 8px;
         text-align: left;
         line-height: 1.45;
-        min-height: 52px;
+        min-height: 54px;
         display: flex;
         align-items: center;
     }
@@ -237,7 +253,7 @@ def get_image_base64(name_key):
             return None
     return None
 
-# ----------------- คำถาม 15 ข้อ -----------------
+# ----------------- คำถาม 15 ข้อตามโครงสร้างจริง -----------------
 questions_15 = [
     {"id": 1, "code": "Q1", "shade": "คอมมิวนิสต์", "q": "รัฐควรให้ความสำคัญกับผลประโยชน์และความต้องการของส่วนรวมมากกว่าสิทธิในการถือครองทรัพย์สินและผลประโยชน์ส่วนบุคคล เพื่อสร้างสังคมที่ไม่มีการแก่งแย่งชนชั้น", "type": "scale"},
     {"id": 2, "code": "Q2", "shade": "คอมมิวนิสต์", "q": "ประชาชนควรร่วมกันทำงานและมีส่วนร่วมในการผลิตและแบ่งปันทรัพยากรหรือผลผลิตของประเทศอย่างเป็นธรรม", "type": "scale"},
@@ -339,7 +355,7 @@ if st.session_state.page == "home":
         <div class="hero-banner-red">
             <span class="tag-badge-red">POLITICAL SPECTRUM MODEL</span>
             <h1 style="color:#881337; margin:8px 0; font-weight:700; font-size:32px;">คุณยืนอยู่จุดใดในทางการเมือง?</h1>
-            <p style="color:#475569; font-size:15px; margin:auto; line-height:1.6; max-width:620px;">
+            <p style="color:#475569; font-size:15px; margin:auto; line-height:1.6; max-width:640px;">
                 ค้นพบจุดยืนและแนวคิดของคุณผ่านแบบทดสอบ 15 ข้อ ครอบคลุมอุดมการณ์ทางการเมือง พร้อมคำถามตัดสินรัฐบาลในฝัน
             </p>
         </div>
@@ -373,7 +389,7 @@ if st.session_state.page == "home":
             st.rerun()
 
 # =======================================================
-# 2. หน้าคำถาม (Quiz Screen)
+# 2. หน้าคำถาม (Quiz Screen: กว้างพอดีตา ไม่หดแคบ)
 # =======================================================
 elif st.session_state.page == "quiz":
     q_idx = st.session_state.current_q
@@ -388,14 +404,15 @@ elif st.session_state.page == "quiz":
         st.progress((q_idx + 1) / len(questions_15))
         st.caption(f"ข้อที่ {q_idx + 1} จาก {len(questions_15)} ข้อ ({int((q_idx + 1) / len(questions_15) * 100)}%)")
 
+    # การ์ดคำถามแบบกว้างพอดีตา
     st.markdown(f"""
     <div class="main-card-light">
-        <div style="color:#64748b; font-size:13.5px; font-weight:500;">ข้อที่ {q_idx + 1} จาก {len(questions_15)}</div>
-        <h3 style="color:#0f172a; margin-top:8px; font-size:20px; line-height:1.55; font-weight:700;">“{q_data['q']}”</h3>
+        <div style="color:#64748b; font-size:14px; font-weight:500;">ข้อที่ {q_idx + 1} จาก {len(questions_15)}</div>
+        <h3 style="color:#0f172a; margin: 12px 0 16px 0; font-size:21px; line-height:1.6; font-weight:700;">“{q_data['q']}”</h3>
     """, unsafe_allow_html=True)
 
     if q_data["type"] == "scale":
-        st.markdown("<div style='font-weight:600; color:#334155; margin-bottom:10px; font-size:14.5px;'>เลือกระดับความคิดเห็นของคุณ:</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-weight:600; color:#334155; margin-bottom:12px; font-size:14.5px;'>เลือกระดับความคิดเห็นของคุณ:</div>", unsafe_allow_html=True)
         cur_ans = st.session_state.answers.get(q_idx, 0.50)
         choice = st.radio(
             "ระดับความคิดเห็น",
@@ -407,7 +424,8 @@ elif st.session_state.page == "quiz":
         st.session_state.answers[q_idx] = choice
         st.markdown("</div>", unsafe_allow_html=True)
     else:
-        st.markdown("<div style='font-weight:600; color:#be123c; margin-bottom:12px; font-size:14.5px;'>เลือก 1 รูปแบบที่ตรงกับแนวทางในฝันของคุณมากที่สุด:</div>", unsafe_allow_html=True)
+        # ข้อ 15
+        st.markdown("<div style='font-weight:600; color:#be123c; margin-bottom:12px; font-size:15px;'>เลือก 1 รูปแบบที่ตรงกับแนวทางในฝันของคุณมากที่สุด:</div>", unsafe_allow_html=True)
         cur_ans = st.session_state.answers.get(q_idx, 0)
         choice_idx = st.radio(
             "เลือกแนวทางของรัฐบาลในฝัน",
@@ -435,7 +453,7 @@ elif st.session_state.page == "quiz":
                 st.rerun()
 
 # =======================================================
-# 3. หน้าผลลัพธ์ (Result Screen: แบ่งสัดส่วนคอลัมน์สมบูรณ์แบบ)
+# 3. หน้าผลลัพธ์ (Result Screen: แบ่งสัดส่วน 2 ฝั่งสวยงาม)
 # =======================================================
 elif st.session_state.page == "result":
     shade_scores = {
@@ -470,8 +488,8 @@ elif st.session_state.page == "result":
         </div>
     """, unsafe_allow_html=True)
 
-    # แบ่ง 2 คอลัมน์สำหรับ "สรุปคะแนน" และ "กราฟใยแมงมุม"
-    col_stat, col_chart = st.columns([1.1, 1.4])
+    # แบ่ง 2 คอลัมน์: ฝั่งซ้ายสรุปผล ฝั่งขวากราฟเรดาร์
+    col_stat, col_chart = st.columns([1.1, 1.3])
     with col_stat:
         st.markdown("""
         <div class="main-card-light" style="height:100%;">
@@ -530,7 +548,7 @@ elif st.session_state.page == "result":
         st.pyplot(fig)
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # ----------------- การ์ดบุคคลสำคัญ 3 คอลัมน์ (แสดง 3 ใบเคียงข้างกันบนจอคอม) -----------------
+    # ----------------- การ์ดบุคคลสำคัญ 3 ท่าน -----------------
     st.markdown("### 🏛 นักคิดและบุคคลสำคัญที่สอดคล้องกับคุณ")
     st.caption(f"ตัวแทนทางความคิดทั้งด้านนักคิด ปรัชญา และผู้นำในกลุ่มแนวคิด: {best_shade}")
 
@@ -544,7 +562,6 @@ elif st.session_state.page == "result":
         {"badge_title": "🧭 ภาพรวม: ตัวแทนอุดมการณ์", "match": "95% Alignment", "data": p3}
     ]
 
-    # คืนค่า st.columns(3) เพื่อให้จอคอมเรียง 3 คอลัมน์สวยงาม และมือถือจะปรับเป็น Responsive อัตโนมัติ
     cols = st.columns(3)
     for idx, card in enumerate(three_cards):
         with cols[idx]:
