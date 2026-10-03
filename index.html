@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน้าเว็บตัวอย่าง</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #ffffff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #2563eb;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 1.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #0f172a;
+    }
+
+    .hero p {
+      font-size: 1.125rem;
+      color: #64748b;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      background-color: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem 1.5rem;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+
+    .card p {
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #94a3b8;
+      font-size: 0.875rem;
+      border-top: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">MyBrand</div>
+    <nav>
+      <button class="btn" onclick="handleClick()">ติดต่อเรา</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>สร้างเว็บไซต์ของคุณได้ง่ายๆ</h1>
+      <p>เทมเพลตเริ่มต้นที่พร้อมนำไปปรับแต่ง Responsive บนทุกอุปกรณ์ทั้งมือถือและคอมพิวเตอร์</p>
+      <button class="btn" onclick="handleClick()">เริ่มต้นใช้งาน</button>
+    </section>
+
+    <section class="cards-container">
+      <div class="card">
+        <h3>ความเร็วสูง</h3>
+        <p>โครงสร้างเบา ทำงานรวดเร็ว ไม่พึ่งพาไลบรารีภายนอก</p>
+      </div>
+      <div class="card">
+        <h3>รองรับมือถือ</h3>
+        <p>แสดงผลได้พอดีกับทุกขนาดหน้าจอโดยอัตโนมัติ</p>
+      </div>
+      <div class="card">
+        <h3>ปรับแต่งง่าย</h3>
+        <p>แยกโค้ดเป็นสัดส่วนชัดเจน แก้ไขสีและข้อความได้ทันที</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2026 MyBrand. สงวนลิขสิทธิ์ทั้งหมด.
+  </footer>
+
+  <script>
+    function handleClick() {
+      alert("ระบบพร้อมใช้งานแล้ว!");
+    }
+  </script>
+
+</body>
+</html>
