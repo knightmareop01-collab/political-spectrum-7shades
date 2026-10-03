@@ -177,13 +177,12 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ----------------- ฟังก์ชันดึงรูปภาพ Base64 แบบ Deep Search ทุกโฟลเดอร์ -----------------
+# ----------------- ฟังก์ชันดึงรูปภาพ Base64 รองรับชื่อ Phomvihane -----------------
 @st.cache_data
 def get_all_image_map():
     valid_exts = {".jpg", ".jpeg", ".png", ".webp", ".jfif"}
     image_dict = {}
     
-    # สแกนหาไฟล์รูปภาพทั้งหมดในโปรเจกต์ ไม่จำกัดว่าอยู่ root หรือ subfolder
     for root, _, files in os.walk("."):
         for f in files:
             ext = os.path.splitext(f)[1].lower()
@@ -192,7 +191,6 @@ def get_all_image_map():
                 base_name = os.path.splitext(f)[0].strip().lower()
                 image_dict[base_name] = full_path
                 
-                # เก็บแบบตัดวงเล็บเผื่อไว้ เช่น 'adolf hitler' จาก 'adolf hitler (อดอล์ฟ ฮิตเลอร์)'
                 if "(" in base_name:
                     short_name = base_name.split("(")[0].strip()
                     image_dict[short_name] = full_path
@@ -211,18 +209,12 @@ def get_image_base64(name_key):
     elif short_k in img_map:
         target_path = img_map[short_k]
         
-    # 2. เทียบแบบค้นหาบางส่วน (Substring search)
-    if not target_path:
-        for k_file, path in img_map.items():
-            if short_k in k_file or k_file in short_k:
-                target_path = path
-                break
-                
-    # 3. แมปชื่อพิเศษ
+    # 2. แมปชื่อไฟล์กรณีเปลี่ยนชื่อเป็น Phomvihane หรือคำย่อ
     if not target_path:
         keywords = {
-            "kaysone": "kaysone phomvihane",
-            "ไกรสร": "kaysone phomvihane",
+            "phomvihane": "phomvihane",
+            "kaysone": "phomvihane",
+            "ไกรสร": "phomvihane",
             "palme": "olof palme",
             "engels": "friedrich engels",
             "marx": "คาร์ล มาร์กซ์ (karl marx)",
@@ -252,6 +244,13 @@ def get_image_base64(name_key):
                         target_path = path
                         break
             if target_path:
+                break
+
+    # 3. เทียบแบบ Substring ทั่วไป
+    if not target_path:
+        for k_file, path in img_map.items():
+            if short_k in k_file or k_file in short_k:
+                target_path = path
                 break
 
     if target_path and os.path.exists(target_path):
@@ -315,7 +314,7 @@ spectrum_master = {
         "desc": "รัฐหรือสังคมส่วนรวมเป็นเจ้าของและกำกับดูแลปัจจัยการผลิตสำคัญ เพื่อจัดสวัสดิการถ้วนหน้า ลดความเหลื่อมล้ำทางรายได้ และกระจายผลประโยชน์อย่างเป็นธรรม",
         "thinker": {"name": "Friedrich Engels", "role": "นักคิดสังคมนิยม: วิเคราะห์โครงสร้างสังคมและความเสมอภาค", "quote": "“ความเป็นเจ้าของทรัพย์สินมีส่วนทำให้เกิดความไม่เสมอภาค”"},
         "leader": {"name": "Olof Palme", "role": "ผู้นำสังคมนิยม: รัฐสวัสดิการถ้วนหน้าและการลดความเหลื่อมล้ำ", "quote": "“สิทธิสวัสดิการของประชาชน คือรากฐานที่แท้จริงของประชาธิปไตย”"},
-        "overall": {"name": "Kaysone Phomvihane", "role": "ผู้นำสังคมนิยม: การขับเคลื่อนสังคมเพื่อประโยชน์สุขส่วนรวม", "quote": "“สร้างสรรค์สังคมบนพื้นฐานความเป็นธรรมแก่ประชาชนทุกคน”"}
+        "overall": {"name": "Phomvihane", "role": "ผู้นำสังคมนิยม: การขับเคลื่อนสังคมเพื่อประโยชน์สุขส่วนรวม", "quote": "“สร้างสรรค์สังคมบนพื้นฐานความเป็นธรรมแก่ประชาชนทุกคน”"}
     },
     "เสรีนิยม": {
         "title": "เสรีนิยม (Liberalism)",
@@ -491,7 +490,6 @@ elif st.session_state.page == "result":
     best_shade = max(shade_scores, key=shade_scores.get)
     profile_data = spectrum_master[best_shade]
 
-    # ส่วนหัวผลลัพธ์
     st.markdown(f"""
         <div class="hero-banner-red">
             <span class="tag-badge-red">POLITICAL SPECTRUM RESULT</span>
