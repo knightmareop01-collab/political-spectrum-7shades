@@ -17,10 +17,10 @@ setup_thai_font()
 st.set_page_config(
     page_title="แบบประเมินจุดยืนทางการเมือง 7 อุดมการณ์",
     page_icon="🧭",
-    layout="wide"  # ใช้ Wide layout เพื่อไม่ให้หน้าจอบนคอมโดนบีบแคบ
+    layout="wide"
 )
 
-# ----------------- CSS สไตล์ Responsive UI (สมดุลทั้งคอมและมือถือ) -----------------
+# ----------------- CSS สไตล์ Responsive UI (สมดุลทั้งจอคอมและมือถือ) -----------------
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
@@ -34,70 +34,69 @@ st.markdown("""
         color: #1e293b !important;
     }
     
-    /* ควบคุมขนาดคอนเทนเนอร์บนจอคอมให้กว้างพอดี ไม่หดแคบเป็นกล่องเล็ก */
     .block-container {
-        max-width: 960px !important;
+        width: 92% !important;
+        max-width: 1100px !important;
         padding-top: 2rem !important;
-        padding-bottom: 3rem !important;
+        padding-bottom: 3.5rem !important;
         margin: 0 auto !important;
     }
     
-    /* Hero Banner สว่างพรีเมียม */
     .hero-banner-red {
         background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 50%, #fecdd3 100%);
         border-radius: 20px;
-        padding: 32px 24px;
+        padding: 34px 24px;
         text-align: center;
         margin-bottom: 24px;
         border: 1px solid #fecdd3;
         box-shadow: 0 4px 20px rgba(225, 29, 72, 0.05);
+        width: 100% !important;
     }
     
     .tag-badge-red {
         background-color: #ffe4e6;
         color: #e11d48;
-        font-size: 13px;
+        font-size: 13.5px;
         font-weight: 700;
-        padding: 5px 14px;
+        padding: 5px 16px;
         border-radius: 20px;
         display: inline-block;
         margin-bottom: 12px;
         border: 1px solid #fecdd3;
     }
     
-    /* การ์ดเนื้อหา */
     .main-card-light {
         background-color: #ffffff;
-        border-radius: 16px;
-        padding: 24px 28px;
+        border-radius: 18px;
+        padding: 26px 30px;
         border: 1px solid #f1f5f9;
         box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
-        margin-bottom: 20px;
+        margin-bottom: 22px;
+        width: 100% !important;
     }
     
-    /* Radio ตัวเลือกคำถาม */
     div[data-testid="stRadio"] label p {
-        font-size: 15px !important;
+        font-size: 15.5px !important;
         font-weight: 500 !important;
         color: #1e293b !important;
-        line-height: 1.5 !important;
+        line-height: 1.55 !important;
     }
     div[data-testid="stRadio"] > div {
         background-color: #ffffff;
         padding: 12px 16px;
-        border-radius: 12px;
+        border-radius: 14px;
         border: 1px solid #f1f5f9;
         gap: 12px !important;
     }
 
-    /* ปุ่มกดหลักโทนแดง */
     div.stButton > button[kind="primary"] {
         background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
         color: #ffffff !important;
         border: none !important;
         border-radius: 12px !important;
         font-weight: 600 !important;
-        padding: 10px 24px !important;
+        padding: 11px 26px !important;
+        font-size: 15.5px !important;
         box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25) !important;
         transition: all 0.2s ease !important;
     }
@@ -107,43 +106,37 @@ st.markdown("""
         transform: translateY(-1px) !important;
     }
     
-    /* ปุ่มย้อนกลับ */
     div.stButton > button[kind="secondary"] {
         background-color: #ffffff !important;
         color: #475569 !important;
         border: 1px solid #e2e8f0 !important;
         border-radius: 12px !important;
         font-weight: 500 !important;
-        padding: 9px 20px !important;
-    }
-    div.stButton > button[kind="secondary"]:hover {
-        border-color: #cbd5e1 !important;
-        color: #0f172a !important;
-        background-color: #f8fafc !important;
+        padding: 10px 22px !important;
+        font-size: 14.5px !important;
     }
 
-    /* การ์ดบุคคลสำคัญ 3 ใบ สัดส่วนมาตรฐาน ไม่ยืดแบน */
+    /* การ์ดบุคคลสำคัญ 3 ใบ สัดส่วนเท่ากัน 100% */
     .person-card-complete {
         background: #ffffff;
         border: 1px solid #f1f5f9;
         border-radius: 16px;
-        padding: 18px;
+        padding: 20px;
         text-align: center;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 490px;
+        min-height: 500px;
         margin-bottom: 15px;
     }
     
-    /* ปรับกรอบรูปภาพให้เท่ากัน 100% พร้อมล็อกตำแหน่งใบหน้า */
     .person-img-wrapper {
         width: 100%;
         aspect-ratio: 4 / 3;
         border-radius: 12px;
         overflow: hidden;
-        margin: 12px 0;
+        margin: 14px 0;
         background-color: #f8fafc;
         border: 1px solid #f1f5f9;
         display: flex;
@@ -154,92 +147,111 @@ st.markdown("""
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
-        object-position: center 20% !important; /* จัดโฟกัสช่วงใบหน้าพอดี */
+        object-position: center 20% !important;
     }
     
     .quote-box-red {
         font-size: 13px;
         color: #475569;
         background: #fff1f2;
-        padding: 10px 12px;
-        border-radius: 8px;
+        padding: 12px 14px;
+        border-radius: 10px;
         border-left: 3px solid #e11d48;
-        margin-top: 8px;
+        margin-top: 10px;
         text-align: left;
-        line-height: 1.45;
-        min-height: 54px;
+        line-height: 1.5;
+        min-height: 56px;
         display: flex;
         align-items: center;
     }
     .stat-badge-red {
         background: #ffe4e6;
         color: #be123c;
-        font-size: 11.5px;
+        font-size: 12px;
         font-weight: 700;
-        padding: 3px 10px;
-        border-radius: 12px;
+        padding: 4px 12px;
+        border-radius: 14px;
         display: inline-block;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# ----------------- ฟังก์ชันดึงรูปภาพ Base64 -----------------
+# ----------------- ฟังก์ชันดึงรูปภาพ Base64 แบบ Deep Search ทุกโฟลเดอร์ -----------------
+@st.cache_data
+def get_all_image_map():
+    valid_exts = {".jpg", ".jpeg", ".png", ".webp", ".jfif"}
+    image_dict = {}
+    
+    # สแกนหาไฟล์รูปภาพทั้งหมดในโปรเจกต์ ไม่จำกัดว่าอยู่ root หรือ subfolder
+    for root, _, files in os.walk("."):
+        for f in files:
+            ext = os.path.splitext(f)[1].lower()
+            if ext in valid_exts:
+                full_path = os.path.join(root, f)
+                base_name = os.path.splitext(f)[0].strip().lower()
+                image_dict[base_name] = full_path
+                
+                # เก็บแบบตัดวงเล็บเผื่อไว้ เช่น 'adolf hitler' จาก 'adolf hitler (อดอล์ฟ ฮิตเลอร์)'
+                if "(" in base_name:
+                    short_name = base_name.split("(")[0].strip()
+                    image_dict[short_name] = full_path
+    return image_dict
+
 def get_image_base64(name_key):
-    if not os.path.exists("images"):
-        return None
-    files = os.listdir("images")
+    img_map = get_all_image_map()
+    clean_k = name_key.strip().lower()
+    short_k = clean_k.split("(")[0].strip()
+    
     target_path = None
     
-    clean_k = name_key.strip().lower()
-    no_paren = clean_k.split("(")[0].strip()
-    
-    alias_map = {
-        "kaysone phomvihane": "kaysone phomvihane",
-        "olof palme": "olof palme",
-        "friedrich engels": "friedrich engels",
-        "karl marx": "คาร์ล มาร์กซ์ (karl marx)",
-        "คาร์ล มาร์กซ์": "คาร์ล มาร์กซ์ (karl marx)",
-        "vladimir lenin": "วลาดีมีร์ เลนิน (vladimir lenin)",
-        "วลาดีมีร์ เลนิน": "วลาดีมีร์ เลนิน (vladimir lenin)",
-        "ho chi minh": "โฮจิมินห์ (ho chi minh)",
-        "โฮจิมินห์": "โฮจิมินห์ (ho chi minh)",
-        "angela merkel": "angela markel",
-        "angela markel": "angela markel",
-        "tony blair": "โทนี แบลร์ (tony blair)",
-        "โทนี แบลร์": "โทนี แบลร์ (tony blair)",
-        "justin trudeau": "จัสติน ทรูโด (justin trudeau)",
-        "จัสติน ทรูโด": "จัสติน ทรูโด (justin trudeau)",
-        "edmund burke": "edmund burke",
-        "shinzo abe": "shinzo abe",
-        "ชวน หลีกภัย": "ชวน หลีกภัย",
-        "javier milei": "javier milei",
-        "robert nozick": "robert nozick",
-        "ron paul": "ron paul",
-        "john rawls": "john rawls",
-        "valéry giscard d'estaing": "valéry giscard d'estaing",
-        "giovanni gentile": "โจวันนี เจตินเล (giovanni gentile)",
-        "โจวันนี เจตินเล": "โจวันนี เจตินเล (giovanni gentile)",
-        "benito mussolini": "benito mussolini (เบนิโต มุสโสลินี)",
-        "เบนิโต มุสโสลินี": "benito mussolini (เบนิโต มุสโสลินี)",
-        "adolf hitler": "adolf hitler (อดอล์ฟ ฮิตเลอร์)",
-        "อดอล์ฟ ฮิตเลอร์": "adolf hitler (อดอล์ฟ ฮิตเลอร์)",
-        "แอนโทนี กิดเดนส์": "แอนโทนี กิดเดนส์"
-    }
-
-    search_target = alias_map.get(no_paren, no_paren)
-
-    for f in files:
-        name_no_ext = os.path.splitext(f)[0].strip().lower()
-        if clean_k == name_no_ext or search_target == name_no_ext:
-            target_path = os.path.join("images", f)
-            break
-            
+    # 1. เทียบตรงๆ
+    if clean_k in img_map:
+        target_path = img_map[clean_k]
+    elif short_k in img_map:
+        target_path = img_map[short_k]
+        
+    # 2. เทียบแบบค้นหาบางส่วน (Substring search)
     if not target_path:
-        for f in files:
-            name_no_ext = os.path.splitext(f)[0].strip().lower()
-            if search_target in name_no_ext or name_no_ext in search_target:
-                target_path = os.path.join("images", f)
+        for k_file, path in img_map.items():
+            if short_k in k_file or k_file in short_k:
+                target_path = path
+                break
+                
+    # 3. แมปชื่อพิเศษ
+    if not target_path:
+        keywords = {
+            "kaysone": "kaysone phomvihane",
+            "ไกรสร": "kaysone phomvihane",
+            "palme": "olof palme",
+            "engels": "friedrich engels",
+            "marx": "คาร์ล มาร์กซ์ (karl marx)",
+            "lenin": "วลาดีมีร์ เลนิน (vladimir lenin)",
+            "minh": "โฮจิมินห์ (ho chi minh)",
+            "zedong": "เหมา เจ๋อตง (mao zedong)",
+            "merkel": "angela markel",
+            "markel": "angela markel",
+            "blair": "โทนี แบลร์ (tony blair)",
+            "trudeau": "จัสติน ทรูโด (justin trudeau)",
+            "burke": "edmund burke",
+            "abe": "shinzo abe",
+            "ชวน": "ชวน หลีกภัย",
+            "milei": "javier milei",
+            "nozick": "robert nozick",
+            "rawls": "john rawls",
+            "locke": "john locke",
+            "gentile": "โจวันนี เจตินเล (giovanni gentile)",
+            "mussolini": "benito mussolini (เบนิโต มุสโสลินี)",
+            "hitler": "adolf hitler (อดอล์ฟ ฮิตเลอร์)",
+            "giddens": "แอนโทนี กิดเดนส์"
+        }
+        for kw, target_k in keywords.items():
+            if kw in short_k:
+                for k_file, path in img_map.items():
+                    if target_k in k_file or k_file in target_k:
+                        target_path = path
+                        break
+            if target_path:
                 break
 
     if target_path and os.path.exists(target_path):
@@ -253,7 +265,7 @@ def get_image_base64(name_key):
             return None
     return None
 
-# ----------------- คำถาม 15 ข้อตามโครงสร้างจริง -----------------
+# ----------------- คำถาม 15 ข้อ -----------------
 questions_15 = [
     {"id": 1, "code": "Q1", "shade": "คอมมิวนิสต์", "q": "รัฐควรให้ความสำคัญกับผลประโยชน์และความต้องการของส่วนรวมมากกว่าสิทธิในการถือครองทรัพย์สินและผลประโยชน์ส่วนบุคคล เพื่อสร้างสังคมที่ไม่มีการแก่งแย่งชนชั้น", "type": "scale"},
     {"id": 2, "code": "Q2", "shade": "คอมมิวนิสต์", "q": "ประชาชนควรร่วมกันทำงานและมีส่วนร่วมในการผลิตและแบ่งปันทรัพยากรหรือผลผลิตของประเทศอย่างเป็นธรรม", "type": "scale"},
@@ -354,42 +366,44 @@ if st.session_state.page == "home":
     st.markdown("""
         <div class="hero-banner-red">
             <span class="tag-badge-red">POLITICAL SPECTRUM MODEL</span>
-            <h1 style="color:#881337; margin:8px 0; font-weight:700; font-size:32px;">คุณยืนอยู่จุดใดในทางการเมือง?</h1>
-            <p style="color:#475569; font-size:15px; margin:auto; line-height:1.6; max-width:640px;">
+            <h1 style="color:#881337; margin:8px 0; font-weight:700; font-size:34px;">คุณยืนอยู่จุดใดในทางการเมือง?</h1>
+            <p style="color:#475569; font-size:16px; margin:auto; line-height:1.65; max-width:650px;">
                 ค้นพบจุดยืนและแนวคิดของคุณผ่านแบบทดสอบ 15 ข้อ ครอบคลุมอุดมการณ์ทางการเมือง พร้อมคำถามตัดสินรัฐบาลในฝัน
             </p>
         </div>
     """, unsafe_allow_html=True)
 
-    c1, c2 = st.columns([1.8, 1.2])
+    c1, c2 = st.columns([1.85, 1.15])
     with c1:
         st.markdown("""
         <div class="main-card-light" style="height:100%;">
-            <h4 style="margin-top:0; color:#0f172a; font-weight:700; font-size:18px;">แบบประเมินจุดยืนทางการเมือง 15 ข้อ</h4>
-            <p style="color:#64748b; font-size:14.5px; line-height:1.6;">
+            <h4 style="margin-top:0; color:#0f172a; font-weight:700; font-size:19px;">แบบประเมินจุดยืนทางการเมือง 15 ข้อ</h4>
+            <p style="color:#64748b; font-size:15px; line-height:1.65;">
                 • <b>ข้อ 1–14:</b> ประเมินระดับความคิดเห็นต่อประเด็นทางสังคมและเศรษฐกิจ<br>
                 • <b>ข้อ 15:</b> ตัวตัดสินรูปแบบรัฐบาลในฝันที่คุณเห็นด้วยมากที่สุด
             </p>
-            <div style="background:#fff1f2; padding:8px 14px; border-radius:12px; font-weight:600; color:#be123c; font-size:13px; border:1px solid #fecdd3; display:inline-block; margin-top:8px;">
+            <div style="background:#fff1f2; padding:10px 16px; border-radius:12px; font-weight:600; color:#be123c; font-size:13.5px; border:1px solid #fecdd3; display:inline-block; margin-top:8px;">
                 ⏱ ใช้เวลาตอบประมาณ 3 นาที
             </div>
         </div>
         """, unsafe_allow_html=True)
     with c2:
         st.markdown("""
-        <div class="main-card-light" style="text-align:center; background:#be123c; color:white; padding:30px 20px; border:none;">
-            <div style="font-size:54px; font-weight:800; color:#ffffff; line-height:1;">15</div>
-            <div style="color:#fecdd3; font-size:14px; margin-top:8px;">คำถามประเมินจุดยืน</div>
+        <div class="main-card-light" style="text-align:center; background:#be123c; color:white; padding:32px 20px; border:none; height:100%; display:flex; flex-direction:column; justify-content:center;">
+            <div style="font-size:56px; font-weight:800; color:#ffffff; line-height:1;">15</div>
+            <div style="color:#fecdd3; font-size:15px; margin-top:10px;">คำถามประเมินจุดยืน</div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("🚀 เริ่มทำแบบทดสอบ", use_container_width=True, type="primary"):
-            st.session_state.page = "quiz"
-            st.session_state.current_q = 0
-            st.session_state.answers = {}
-            st.rerun()
+        
+    st.write("")
+    if st.button("🚀 เริ่มทำแบบทดสอบ", use_container_width=True, type="primary"):
+        st.session_state.page = "quiz"
+        st.session_state.current_q = 0
+        st.session_state.answers = {}
+        st.rerun()
 
 # =======================================================
-# 2. หน้าคำถาม (Quiz Screen: กว้างพอดีตา ไม่หดแคบ)
+# 2. หน้าคำถาม (Quiz Screen)
 # =======================================================
 elif st.session_state.page == "quiz":
     q_idx = st.session_state.current_q
@@ -404,15 +418,14 @@ elif st.session_state.page == "quiz":
         st.progress((q_idx + 1) / len(questions_15))
         st.caption(f"ข้อที่ {q_idx + 1} จาก {len(questions_15)} ข้อ ({int((q_idx + 1) / len(questions_15) * 100)}%)")
 
-    # การ์ดคำถามแบบกว้างพอดีตา
     st.markdown(f"""
     <div class="main-card-light">
         <div style="color:#64748b; font-size:14px; font-weight:500;">ข้อที่ {q_idx + 1} จาก {len(questions_15)}</div>
-        <h3 style="color:#0f172a; margin: 12px 0 16px 0; font-size:21px; line-height:1.6; font-weight:700;">“{q_data['q']}”</h3>
+        <h2 style="color:#0f172a; margin: 12px 0 18px 0; font-size:22px; line-height:1.6; font-weight:700;">“{q_data['q']}”</h2>
     """, unsafe_allow_html=True)
 
     if q_data["type"] == "scale":
-        st.markdown("<div style='font-weight:600; color:#334155; margin-bottom:12px; font-size:14.5px;'>เลือกระดับความคิดเห็นของคุณ:</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-weight:600; color:#334155; margin-bottom:12px; font-size:15px;'>เลือกระดับความคิดเห็นของคุณ:</div>", unsafe_allow_html=True)
         cur_ans = st.session_state.answers.get(q_idx, 0.50)
         choice = st.radio(
             "ระดับความคิดเห็น",
@@ -424,7 +437,6 @@ elif st.session_state.page == "quiz":
         st.session_state.answers[q_idx] = choice
         st.markdown("</div>", unsafe_allow_html=True)
     else:
-        # ข้อ 15
         st.markdown("<div style='font-weight:600; color:#be123c; margin-bottom:12px; font-size:15px;'>เลือก 1 รูปแบบที่ตรงกับแนวทางในฝันของคุณมากที่สุด:</div>", unsafe_allow_html=True)
         cur_ans = st.session_state.answers.get(q_idx, 0)
         choice_idx = st.radio(
@@ -453,7 +465,7 @@ elif st.session_state.page == "quiz":
                 st.rerun()
 
 # =======================================================
-# 3. หน้าผลลัพธ์ (Result Screen: แบ่งสัดส่วน 2 ฝั่งสวยงาม)
+# 3. หน้าผลลัพธ์ (Result Screen)
 # =======================================================
 elif st.session_state.page == "result":
     shade_scores = {
@@ -484,11 +496,10 @@ elif st.session_state.page == "result":
         <div class="hero-banner-red">
             <span class="tag-badge-red">POLITICAL SPECTRUM RESULT</span>
             <h1 style="color:#881337; margin:8px 0 12px 0; font-size:32px; font-weight:800;">{profile_data['title']}</h1>
-            <p style="color:#475569; font-size:15px; max-width:680px; margin:0 auto; line-height:1.65;">{profile_data['desc']}</p>
+            <p style="color:#475569; font-size:15px; max-width:700px; margin:0 auto; line-height:1.65;">{profile_data['desc']}</p>
         </div>
     """, unsafe_allow_html=True)
 
-    # แบ่ง 2 คอลัมน์: ฝั่งซ้ายสรุปผล ฝั่งขวากราฟเรดาร์
     col_stat, col_chart = st.columns([1.1, 1.3])
     with col_stat:
         st.markdown("""
@@ -501,14 +512,14 @@ elif st.session_state.page == "result":
             color = "#e11d48" if is_best else "#64748b"
             weight = "700" if is_best else "500"
             st.markdown(f"""
-            <div style="display:flex; justify-content:space-between; margin:10px 0; font-size:14.5px;">
+            <div style="display:flex; justify-content:space-between; margin:11px 0; font-size:15px;">
                 <span style="color:{color}; font-weight:{weight};">{'⭐ ' if is_best else '• '}{s_name}</span>
                 <span style="color:{color}; font-weight:{weight};">{'สอดคล้องสูงสุด' if is_best else 'ทั่วไป'}</span>
             </div>
             """, unsafe_allow_html=True)
 
         st.markdown(f"""
-            <div style="margin-top:16px; padding-top:12px; border-top:1px solid #f1f5f9; font-size:13.5px; color:#475569;">
+            <div style="margin-top:16px; padding-top:12px; border-top:1px solid #f1f5f9; font-size:14px; color:#475569;">
                 <b>รูปแบบที่เลือกในข้อตัดสิน:</b> <span style="color:#be123c; font-weight:600;">{bonus_shade}</span>
             </div>
         </div>
@@ -532,12 +543,12 @@ elif st.session_state.page == "result":
         angles = [n / float(N) * 2 * math.pi for n in range(N)]
         angles += angles[:1]
 
-        fig, ax = plt.subplots(figsize=(4.0, 3.6), subplot_kw=dict(polar=True), facecolor='#ffffff')
+        fig, ax = plt.subplots(figsize=(4.2, 3.8), subplot_kw=dict(polar=True), facecolor='#ffffff')
         ax.set_facecolor('#ffffff')
         ax.set_theta_offset(math.pi / 2)
         ax.set_theta_direction(-1)
 
-        plt.xticks(angles[:-1], radar_labels_plot[:-1], size=8, color='#334155', fontweight='bold')
+        plt.xticks(angles[:-1], radar_labels_plot[:-1], size=8.5, color='#334155', fontweight='bold')
         ax.set_rlabel_position(0)
         plt.yticks([1, 2, 3, 4, 5, 6], ["", "", "", "", "", ""], color="#94a3b8")
         plt.ylim(0, 6)
@@ -576,10 +587,10 @@ elif st.session_state.page == "result":
             card_html = f"""
             <div class="person-card-complete">
                 <div>
-                    <div style="font-size:11px; font-weight:700; color:#e11d48; margin-bottom:4px;">{card['badge_title']}</div>
+                    <div style="font-size:11.5px; font-weight:700; color:#e11d48; margin-bottom:4px;">{card['badge_title']}</div>
                     <span class="stat-badge-red">{card['match']}</span>
                     <h4 style="margin:6px 0 2px 0; color:#0f172a; font-size:16px; font-weight:700;">{p['name']}</h4>
-                    <div style="font-size:12px; color:#64748b; line-height:1.4;">{p['role']}</div>
+                    <div style="font-size:12.5px; color:#64748b; line-height:1.4;">{p['role']}</div>
                 </div>
                 {img_tag}
                 <div class="quote-box-red">{p['quote']}</div>
